@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <title>VTuber Tools - Outils pour VTubers Français</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Page d'accueil -->
+        <div id="homePage" class="page active">
+            <header>
+                <h1>VTuberFR Tools</h1>
+                <p class="subtitle">Plateforme d'outils pour la communauté VTuber française</p>
+            </header>
+
+            <div class="tools-grid">
+                <div class="tool-card" onclick="navigateTo('directory')">
+                    <div class="tool-icon">📋</div>
+                    <h2>Annuaire VTubersFR</h2>
+                    <p>Découvrez tous les VTubers français qui streament sur Twitch</p>
+                    <a href="discvvtfr.html" class="tool-button">
+                        Accéder à l'outil →
+                    </a>
+                </div>
+
+                <div class="tool-card" onclick="navigateTo('social')">
+                    <div class="tool-icon">🔍</div>
+                    <h2>Recherche Réseaux Sociaux</h2>
+                    <p>Trouvez facilement toutes les chaînes et réseaux sociaux d'un VTuber</p>
+                    <div class="tool-button">
+                        Accéder à l'outil →
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <p>Made with 💜 for the VTuberFR community</p>
+            </footer>
+        </div>
+
+        <!-- Page Annuaire -->
+        <div id="directoryPage" class="page">
+            <button class="back-button" onclick="navigateTo('home')">← Retour à l'accueil</button>
+            
+            <div class="tool-page">
+                <h1>📋 Annuaire VTubersFR</h1>
+
+                <div class="search-bar">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un VTuber...">
+                    <select id="filterCategory">
+                        <option value="all">Tous</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="art">Art</option>
+                        <option value="music">Musique</option>
+                        <option value="chat">Just Chatting</option>
+                        <option value="other">Autre</option>
+                    </select>
+                    <button onclick="toggleAddForm()">+ Ajouter</button>
+                </div>
+
+                <div id="addForm" class="add-form">
+                    <h3 style="margin-bottom: 20px; color: #fbc2eb;">Ajouter un VTuber</h3>
+                    <div class="form-grid">
+                        <input type="text" id="vtuberName" placeholder="Nom du VTuber *">
+                        <input type="text" id="vtuberTwitch" placeholder="Nom Twitch *">
+                        <select id="vtuberCategory">
+                            <option value="gaming">Gaming</option>
+                            <option value="art">Art</option>
+                            <option value="music">Musique</option>
+                            <option value="chat">Just Chatting</option>
+                            <option value="other">Autre</option>
+                        </select>
+                        <input type="text" id="vtuberAvatar" placeholder="URL Avatar (optionnel)">
+                        <textarea id="vtuberDescription" placeholder="Description" style="grid-column: 1 / -1; min-height: 80px;"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button onclick="addVTuber()">Sauvegarder</button>
+                        <button onclick="toggleAddForm()" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">Annuler</button>
+                    </div>
+                </div>
+
+                <div id="vtuberList" class="vtuber-list"></div>
+            </div>
+        </div>
+
+        <!-- Page Réseaux Sociaux -->
+        <div id="socialPage" class="page">
+            <button class="back-button" onclick="navigateTo('home')">← Retour à l'accueil</button>
+            
+            <div class="tool-page">
+                <h1>🔍 Recherche Réseaux Sociaux</h1>
+
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; margin-bottom: 10px; color: #e0d4f7; font-weight: bold;">Nom du VTuber</label>
+                    <input type="text" id="socialName" placeholder="Entrez le nom du VTuber" style="width: 100%;">
+                </div>
+
+                <div class="form-grid">
+                    <div>
+                        <label style="display: block; margin-bottom: 10px; color: #e0d4f7;">📺 Twitch</label>
+                        <input type="text" id="socialTwitch" placeholder="nom_utilisateur">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 10px; color: #e0d4f7;">🎥 YouTube</label>
+                        <input type="text" id="socialYoutube" placeholder="@nom_chaine ou ID">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 10px; color: #e0d4f7;">🐦 X (Twitter)</label>
+                        <input type="text" id="socialTwitter" placeholder="@nom_utilisateur">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 10px; color: #e0d4f7;">📸 Instagram</label>
+                        <input type="text" id="socialInstagram" placeholder="nom_utilisateur">
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label style="display: block; margin-bottom: 10px; color: #e0d4f7;">🌐 Site Web</label>
+                        <input type="text" id="socialWebsite" placeholder="https://...">
+                    </div>
+                </div>
+
+                <button onclick="saveSocialLinks()" style="width: 100%; margin-top: 20px;">Sauvegarder les liens</button>
+
+                <div id="socialLinksDisplay" class="hidden" style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, rgba(118, 75, 162, 0.3) 0%, rgba(251, 194, 235, 0.3) 100%); border: 1px solid rgba(251, 113, 133, 0.3); border-radius: 15px;">
+                    <h3 style="margin-bottom: 20px; color: #fbc2eb;">Liens trouvés</h3>
+                    <div id="socialLinksList" class="social-links"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données en mémoire
+        let vtubers = [];
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Charger les données au démarrage
+        window.addEventListener('load', async () => {
+            await loadVTubers();
+        });
+
+        // Navigation
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            if (page === 'home') {
+                document.getElementById('homePage').classList.add('active');
+            } else if (page === 'directory') {
+                document.getElementById('directoryPage').classList.add('active');
+                loadVTubers();
+            } else if (page === 'social') {
+                document.getElementById('socialPage').classList.add('active');
+            }
+        }
+
+        // Toggle formulaire d'ajout
+        function toggleAddForm() {
+            const form = document.getElementById('addForm');
+            form.classList.toggle('active');
+        }
+
+        // Charger les VTubers depuis le storage
+        async function loadVTubers() {
+            try {
+                const result = await window.storage.list('vtuber:');
+                if (result && result.keys) {
+                    const promises = result.keys.map(async (key) => {
+                        try {
+                            const data = await window.storage.get(key);
+                            return data ? JSON.parse(data.value) : null;
+                        } catch {
+                            return null;
+                        }
+                    });
+                    vtubers = (await Promise.all(promises)).filter(v => v !== null);
+                }
+            } catch (error) {
+                console.log('Aucune donnée sauvegardée');
+                vtubers = [];
+            }
+            displayVTubers();
+        }
+
+        // Ajouter un VTuber
+        async function addVTuber() {
+            const name = document.getElementById('vtuberName').value;
+            const twitch = document.getElementById('vtuberTwitch').value;
+            const category = document.getElementById('vtuberCategory').value;
+            const avatar = document.getElementById('vtuberAvatar').value;
+            const description = document.getElementById('vtuberDescription').value;
+
+            if (!name || !twitch) {
+                alert('Le nom et le pseudo Twitch sont obligatoires !');
+                return;
+            }
+
+            const vtuber = {
+                id: Date.now().toString(),
+                name,
+                twitch,
+                category,
+                avatar,
+                description,
+                dateAdded: new Date().toISOString()
+            };
+
+            try {
+                await window.storage.set(`vtuber:${vtuber.id}`, JSON.stringify(vtuber));
+                vtubers.push(vtuber);
+                displayVTubers();
+                
+                // Reset form
+                document.getElementById('vtuberName').value = '';
+                document.getElementById('vtuberTwitch').value = '';
+                document.getElementById('vtuberAvatar').value = '';
+                document.getElementById('vtuberDescription').value = '';
+                toggleAddForm();
+            } catch (error) {
+                alert('Erreur lors de la sauvegarde');
+            }
+        }
+
+        // Supprimer un VTuber
+        async function deleteVTuber(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce VTuber ?')) return;
+            
+            try {
+                await window.storage.delete(`vtuber:${id}`);
+                vtubers = vtubers.filter(v => v.id !== id);
+                displayVTubers();
+            } catch (error) {
+                alert('Erreur lors de la suppression');
+            }
+        }
+
+        // Afficher les VTubers
+        function displayVTubers() {
+            const list = document.getElementById('vtuberList');
+            const filtered = vtubers.filter(v => {
+                const matchesSearch = v.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                                    v.description.toLowerCase().includes(currentSearch.toLowerCase());
+                const matchesCategory = currentFilter === 'all' || v.category === currentFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p style="font-size: 1.3rem;">Aucun VTuber trouvé</p><p style="margin-top: 10px;">Ajoutez votre premier VTuber à l\'annuaire !</p></div>';
+                return;
+            }
+
+            const categoryLabels = {
+                gaming: 'Gaming',
+                art: 'Art',
+                music: 'Musique',
+                chat: 'Just Chatting',
+                other: 'Autre'
+            };
+
+            list.innerHTML = filtered.map(v => `
+                <div class="vtuber-card">
+                    <div class="vtuber-header">
+                        ${v.avatar ? `<img src="${v.avatar}" alt="${v.name}" class="vtuber-avatar">` : ''}
+                        <div class="vtuber-info">
+                            <div class="vtuber-name">${v.name}</div>
+                            <span class="vtuber-category">${categoryLabels[v.category]}</span>
+                        </div>
+                    </div>
+                    ${v.description ? `<div class="vtuber-description">${v.description}</div>` : ''}
+                    <a href="https://twitch.tv/${v.twitch}" target="_blank" class="vtuber-link">
+                        📺 twitch.tv/${v.twitch} →
+                    </a>
+                    <div class="vtuber-actions">
+                        <button class="btn-delete" onclick="deleteVTuber('${v.id}')">Supprimer</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Recherche et filtres
+        document.getElementById('searchInput')?.addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            displayVTubers();
+        });
+
+        document.getElementById('filterCategory')?.addEventListener('change', (e) => {
+            currentFilter = e.target.value;
+            displayVTubers();
+        });
+
+        // Sauvegarder les liens sociaux
+        async function saveSocialLinks() {
+            const name = document.getElementById('socialName').value;
+            const twitch = document.getElementById('socialTwitch').value;
+            const youtube = document.getElementById('socialYoutube').value;
+            const twitter = document.getElementById('socialTwitter').value;
+            const instagram = document.getElementById('socialInstagram').value;
+            const website = document.getElementById('socialWebsite').value;
+
+            if (!name) {
+                alert('Veuillez entrer un nom');
+                return;
+            }
+
+            const socialData = {
+                id: Date.now().toString(),
+                name,
+                links: { twitch, youtube, twitter, instagram, website },
+                dateAdded: new Date().toISOString()
+            };
+
+            try {
+                await window.storage.set(`social:${socialData.id}`, JSON.stringify(socialData));
+                displaySocialLinks();
+                alert('Liens sauvegardés avec succès !');
+            } catch (error) {
+                displaySocialLinks();
+            }
+        }
+
+        // Afficher les liens sociaux
+        function displaySocialLinks() {
+            const twitch = document.getElementById('socialTwitch').value;
+            const youtube = document.getElementById('socialYoutube').value;
+            const twitter = document.getElementById('socialTwitter').value;
+            const instagram = document.getElementById('socialInstagram').value;
+            const website = document.getElementById('socialWebsite').value;
+
+            if (!twitch && !youtube && !twitter && !instagram && !website) {
+                document.getElementById('socialLinksDisplay').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('socialLinksDisplay').classList.remove('hidden');
+            
+            let html = '';
+            if (twitch) html += `<a href="https://twitch.tv/${twitch}" target="_blank" class="social-link-item"><span class="social-icon">📺</span> <span>twitch.tv/${twitch}</span></a>`;
+            if (youtube) html += `<a href="https://youtube.com/${youtube}" target="_blank" class="social-link-item"><span class="social-icon">🎥</span> <span>youtube.com/${youtube}</span></a>`;
+            if (twitter) html += `<a href="https://x.com/${twitter.replace('@', '')}" target="_blank" class="social-link-item"><span class="social-icon">🐦</span> <span>x.com/${twitter.replace('@', '')}</span></a>`;
+            if (instagram) html += `<a href="https://instagram.com/${instagram}" target="_blank" class="social-link-item"><span class="social-icon">📸</span> <span>instagram.com/${instagram}</span></a>`;
+            if (website) html += `<a href="${website}" target="_blank" class="social-link-item"><span class="social-icon">🌐</span> <span>${website}</span></a>`;
+
+            document.getElementById('socialLinksList').innerHTML = html;
+        }
+
+        // Afficher les liens en temps réel
+        ['socialTwitch', 'socialYoutube', 'socialTwitter', 'socialInstagram', 'socialWebsite'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', displaySocialLinks);
+        });
+    </script>
+</body>
+</html>
