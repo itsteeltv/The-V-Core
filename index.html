@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" href="favicon.ico" />
-    <title>VTuber Tools - Outils pour VTubers Français</title>
+    <title>The V-Core</title>
 </head>
 <body>
     <div class="container">
         <!-- Page d'accueil -->
         <div id="homePage" class="page active">
             <header>
-                <h1>VTuberFR Tools</h1>
-                <p class="subtitle">Plateforme d'outils pour la communauté VTuber française</p>
+                <h1>The V-Core</h1>
+                <p class="subtitle">La plateforme d'outils pour la communauté VTuber française</p>
             </header>
 
             <div class="tools-grid">
                 <div class="tool-card">
-                    <div class="tool-icon">📋</div>
+                    <div class="tool-icon">🔍</div>
                     <h2>VTubersFR Finder</h2>
                     <p>Découvrez tous les VTubers français qui streament sur Twitch</p>
                     <a href="discvvtfr.html" class="tool-button">
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="tool-card">
-                    <div class="tool-icon">🔍</div>
+                    <div class="tool-icon">🔒</div>
                     <h2>Comming Soon...</h2>
                     <p>...</p>
                     <div class="tool-button">
@@ -36,9 +36,16 @@
                 </div>
             </div>
 
+            <div id="youtube-player" style="display: none;"></div>
+
+            <button id="music-toggle" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--clr-purple-vibrant); border: 2px solid var(--clr-rose-light); cursor: pointer;">
+                🎵
+            </button>
+
             <footer>
                 <p>Made with 💜 for the VTuberFR community</p>
             </footer>
         </div>
+        <script src="musicplayer.js"></script>
 </body>
 </html>

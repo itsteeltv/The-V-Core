@@ -1,380 +1,238 @@
+/* --- CONFIGURATION GLOBALE --- */
 * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
+:root {
+    --clr-rose-light: #F2BBE3;
+    --clr-purple-soft: #D288F2;
+    --clr-purple-vibrant: #8245BF;
+    --clr-purple-bright: #A75CF2;
+    --clr-peach: #F2C8C4;
+    --bg-dark: #0e0e10;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Dégradé de fond utilisant ta palette */
+    background: linear-gradient(135deg, #0e0e10 0%, #321b4a 50%, #5a2e85 100%);
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+}
 
-        /* Header */
-        header {
-            text-align: center;
-            padding: 40px 20px;
-        }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        h1 {
-            font-size: 3.5rem;
-            background: linear-gradient(to right, #fbc2eb, #a6c1ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
+/* --- HEADER --- */
+header {
+    text-align: center;
+    padding: 40px 20px;
+}
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #e0d4f7;
-        }
+h1 {
+    font-size: 3.5rem;
+    /* Dégradé sur le texte : Rose clair vers Violet doux */
+    background: linear-gradient(to right, var(--clr-rose-light), var(--clr-purple-soft));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 10px rgba(167, 92, 242, 0.3));
+}
 
-        /* Pages */
-        .page {
-            display: none;
-        }
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--clr-peach);
+}
 
-        .page.active {
-            display: block;
-        }
+/* --- PAGES --- */
+.page { display: none; }
+.page.active { display: block; }
 
-        /* Home Page - Tools Grid */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 20px;
-        }
+/* --- GRILLE D'OUTILS (CARTES) --- */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
 
-        .tool-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(167, 139, 250, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
+.tool-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(130, 69, 191, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+}
 
-        .tool-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(251, 113, 133, 0.6);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
+.tool-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--clr-purple-bright);
+    box-shadow: 0 20px 40px rgba(130, 69, 191, 0.3);
+}
 
-        .tool-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
+.tool-icon {
+    width: 80px;
+    height: 80px;
+    /* Dégradé icône : Violet vibrant vers Violet lumineux */
+    background: linear-gradient(135deg, var(--clr-purple-vibrant) 0%, var(--clr-purple-bright) 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
 
-        .tool-card:hover .tool-icon {
-            transform: scale(1.1);
-        }
+.tool-card:hover .tool-icon {
+    transform: scale(1.1) rotate(5deg);
+}
 
-        .tool-card h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: #fbc2eb;
-        }
+.tool-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--clr-purple-soft);
+}
 
-        .tool-card p {
-            color: #e0d4f7;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
+.tool-card p {
+    color: var(--clr-rose-light);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
 
-        .tool-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+/* --- BOUTONS --- */
+.tool-button, button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--clr-purple-vibrant) 0%, var(--clr-purple-bright) 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-        .tool-button:hover {
-            gap: 15px;
-        }
+.tool-button:hover, button:hover {
+    gap: 15px;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(167, 92, 242, 0.4);
+}
 
-        /* Back Button */
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: background 0.3s ease;
-        }
+.back-button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(210, 136, 242, 0.2);
+    margin-bottom: 20px;
+}
 
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+.back-button:hover {
+    background: rgba(210, 136, 242, 0.15);
+}
 
-        /* Tool Pages */
-        .tool-page {
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(167, 139, 250, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-        }
+/* --- FORMULAIRES --- */
+input, select, textarea {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(167, 92, 242, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
 
-        .tool-page h1 {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            background: linear-gradient(to right, #fbc2eb, #a6c1ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--clr-rose-light);
+    background: rgba(255, 255, 255, 0.1);
+}
 
-        /* Form Styles */
-        .search-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
+select option {
+    background: #2a163d;
+    color: white;
+}
 
-        input, select, textarea {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(167, 139, 250, 0.3);
-            border-radius: 10px;
-            color: white;
-            font-size: 1rem;
-        }
+/* --- CARTES VTUBER & LISTES --- */
+.vtuber-card {
+    background: linear-gradient(135deg, rgba(130, 69, 191, 0.1) 0%, rgba(210, 136, 242, 0.1) 100%);
+    border: 1px solid rgba(242, 187, 227, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #fb7185;
-        }
+.vtuber-card:hover {
+    border-color: var(--clr-rose-light);
+    background: rgba(130, 69, 191, 0.2);
+}
 
-        input::placeholder, textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
+.vtuber-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--clr-purple-soft);
+    object-fit: cover;
+}
 
-        select option {
-            background: #667eea;
-        }
+.vtuber-name {
+    color: var(--clr-rose-light);
+}
 
-        .search-input {
-            flex: 1;
-            min-width: 200px;
-        }
+.vtuber-category {
+    background: rgba(130, 69, 191, 0.4);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
 
-        button {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #fb7185 0%, #9333ea 100%);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+.vtuber-link {
+    color: var(--clr-peach);
+    text-decoration: none;
+}
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
+.vtuber-link:hover {
+    color: var(--clr-rose-light);
+    text-decoration: underline;
+}
 
-        /* VTuber Cards */
-        .vtuber-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 20px;
-        }
+#music-toggle {
+    color: white;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
 
-        .vtuber-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-            border: 1px solid rgba(167, 139, 250, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
+#music-toggle:hover {
+    transform: scale(1.1);
+    background: var(--clr-purple-bright) !important;
+    box-shadow: 0 0 20px var(--clr-purple-soft);
+}
 
-        .vtuber-card:hover {
-            border-color: rgba(251, 113, 133, 0.4);
-        }
+/* --- FOOTER & ETATS VIDES --- */
+footer, .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--clr-peach);
+    opacity: 0.8;
+}
 
-        .vtuber-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
+.hidden { display: none; }
 
-        .vtuber-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid #fb7185;
-            object-fit: cover;
-        }
-
-        .vtuber-info {
-            flex: 1;
-        }
-
-        .vtuber-name {
-            font-size: 1.3rem;
-            color: #fbc2eb;
-            margin-bottom: 5px;
-        }
-
-        .vtuber-category {
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(167, 139, 250, 0.3);
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .vtuber-description {
-            color: #e0d4f7;
-            margin: 10px 0;
-        }
-
-        .vtuber-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #a6c1ee;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .vtuber-link:hover {
-            color: #fbc2eb;
-        }
-
-        .vtuber-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-edit, .btn-delete {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-        }
-
-        .btn-delete {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        }
-
-        .btn-edit {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        }
-
-        /* Add Form */
-        .add-form {
-            background: linear-gradient(135deg, rgba(118, 75, 162, 0.3) 0%, rgba(251, 194, 235, 0.3) 100%);
-            border: 1px solid rgba(251, 113, 133, 0.3);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .add-form.active {
-            display: block;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Social Links */
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .social-link-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(167, 139, 250, 0.2);
-            border-radius: 10px;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .social-link-item:hover {
-            background: rgba(167, 139, 250, 0.3);
-        }
-
-        .social-icon {
-            font-size: 1.5rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #e0d4f7;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #e0d4f7;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    .tools-grid { grid-template-columns: 1fr; }
+}
