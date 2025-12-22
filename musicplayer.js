@@ -8,6 +8,9 @@ var player;
 var btn = document.getElementById('music-toggle');
 var hasStarted = false;
 
+// Sélection de l'equalizer (le conteneur des barres)
+const equalizer = document.getElementById('equalizer');
+
 // 2. Création du lecteur une fois l'API prête
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-player', {
@@ -25,8 +28,18 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+// Fonction pour activer/désactiver l'animation visuelle
+function updateVisualizer(isPlaying) {
+    if (!equalizer) return;
+    if (isPlaying) {
+        equalizer.classList.add('playing');
+    } else {
+        equalizer.classList.remove('playing');
+    }
+}
+
 function onPlayerReady(event) {
-    // Volume doux à 30%
+    // Volume très doux (10%)
     player.setVolume(10);
     
     // Lance au premier clic sur la page (contrainte navigateur)
@@ -34,7 +47,7 @@ function onPlayerReady(event) {
         if (!hasStarted) {
             player.playVideo();
             hasStarted = true;
-            btn.innerHTML = "🔊";
+            updateVisualizer(true); // Lance l'animation
         }
     }, { once: true });
 }
@@ -45,11 +58,13 @@ btn.addEventListener('click', (e) => {
     if (!player) return;
 
     var state = player.getPlayerState();
+    
+    // YT.PlayerState.PLAYING correspond à l'état 1
     if (state === YT.PlayerState.PLAYING) {
         player.pauseVideo();
-        btn.innerHTML = "🔇";
+        updateVisualizer(false); // Arrête l'animation
     } else {
         player.playVideo();
-        btn.innerHTML = "🔊";
+        updateVisualizer(true); // Relance l'animation
     }
 });

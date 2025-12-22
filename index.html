@@ -16,6 +16,23 @@
                 <p class="subtitle">La plateforme d'outils pour la communauté VTuber française</p>
             </header>
 
+            <div class="global-stats-container">
+                <div class="global-stats-bar">
+                    <span class="pulse-dot"></span> 
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-v-live">--</span>
+                        <span class="stat-label">VTubers en Live</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-v-viewers">--</span>
+                        <span class="stat-label">Spectateurs cumulés</span>
+                    </div>
+                    <span id="refresh-indicator" class="refresh-dot"></span>
+                </div>
+                <p id="last-update-text" class="update-timestamp">En attente du premier scan...</p>
+            </div>
+
             <div class="tools-grid">
                 <div class="tool-card">
                     <div class="tool-icon">🔍</div>
@@ -38,8 +55,13 @@
 
             <div id="youtube-player" style="display: none;"></div>
 
-            <button id="music-toggle" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--clr-purple-vibrant); border: 2px solid var(--clr-rose-light); cursor: pointer;">
-                🎵
+            <button id="music-toggle" title="Play/Pause Music" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--clr-purple-vibrant); border: 2px solid var(--clr-rose-light); cursor: pointer;">
+                <div class="equalizer" id="equalizer">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
             </button>
 
             <footer>
@@ -47,5 +69,6 @@
             </footer>
         </div>
         <script src="musicplayer.js"></script>
+        <script src="stats.js"></script>
 </body>
 </html>
