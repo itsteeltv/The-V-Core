@@ -1,0 +1,273 @@
+/* --- Bases existantes --- */
+.schedule-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.schedule-header h1 {
+    font-size: 2.5rem;
+    color: var(--clr-purple-vibrant);
+    margin-bottom: 10px;
+}
+
+/* --- Section Authentification & Profil --- */
+.auth-section {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.login-btn {
+    background: #9146ff; /* Twitch */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s ease;
+}
+
+.login-btn:hover { background: #772ce8; transform: scale(1.05); }
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--clr-purple-vibrant);
+}
+
+.user-profile img {
+    border-radius: 50%;
+    border: 2px solid var(--clr-purple-vibrant);
+}
+
+/* --- Formulaire d'Ajout --- */
+.add-stream-card {
+    background: rgba(31, 31, 35, 0.8);
+    border: 1px solid var(--clr-purple-vibrant);
+    padding: 25px;
+    border-radius: 15px;
+    margin: 30px auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(242, 187, 227, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--clr-rose-light);
+}
+
+.submit-btn {
+    background: var(--clr-purple-vibrant);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover { background: #9146ff; filter: brightness(1.2); }
+
+/* --- Viewer & Grille de Planning --- */
+#schedule-viewer {
+    width: 100%;
+    min-height: 400px;
+    height: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border: 1px solid var(--clr-purple-vibrant);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    transition: all 0.5s ease;
+}
+
+/* Grille de gestion (par défaut) */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.schedule-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(242, 187, 227, 0.1);
+    text-align: left;
+    position: relative;
+    transition: 0.3s;
+}
+
+.schedule-card:hover { border-color: var(--clr-purple-vibrant); }
+
+.schedule-card.collab-mode {
+    border-left: 5px solid #ff4b4b;
+    background: linear-gradient(90deg, rgba(255, 75, 75, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+.schedule-card .date { font-weight: bold; color: var(--clr-purple-vibrant); text-transform: capitalize; }
+.schedule-card .hour { font-size: 1.2rem; margin: 5px 0; }
+.schedule-card .title { font-size: 0.9rem; opacity: 0.8; }
+
+.badge-collab {
+    background: #ff4b4b;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* --- ACTIONS (Boutons Modifier/Supprimer) --- */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.delete-btn, .edit-btn {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.delete-btn { background: rgba(255, 75, 75, 0.2); color: #ff4b4b; }
+.delete-btn:hover { background: #ff4b4b; color: white; }
+
+.edit-btn { background: rgba(255, 255, 255, 0.1); color: white; }
+.edit-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* --- RESPONSIVE MOBILE (La modification demandée) --- */
+@media (max-width: 768px) {
+    .schedule-header h1 { font-size: 1.8rem; }
+    
+    /* On force la grille en une seule colonne large */
+    .schedule-grid, .weekly-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    /* On agrandit les cartes pour le confort visuel */
+    .schedule-card, .day-column {
+        width: 100%;
+        padding: 25px;
+    }
+
+    /* On transforme les actions en gros boutons empilés pour les pouces */
+    .card-actions {
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 15px;
+    }
+
+    .delete-btn, .edit-btn {
+        width: 100%;
+        padding: 15px; /* Zone de clic optimale pour mobile */
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    /* On réorganise le profil Twitch pour ne pas qu'il déborde */
+    .auth-section {
+        flex-direction: column;
+    }
+}
+
+/* --- Mode Exportation (Image finale) --- */
+#schedule-viewer.export-mode {
+    padding: 50px !important;
+    background: radial-gradient(circle at top right, #1f1f23, #0e0e10) !important;
+    border: 5px solid var(--clr-purple-vibrant) !important;
+    width: 1100px !important;
+    display: block !important;
+}
+
+#schedule-viewer.export-mode .card-actions {
+    display: none !important;
+}
+
+/* Grille hebdomadaire (Desktop) */
+.weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Mode Export Image forcé */
+#schedule-viewer.export-mode .weekly-grid {
+    grid-template-columns: repeat(7, 1fr) !important;
+    width: 100% !important;
+}
+
+/* Reste de tes styles (day-column, badges, etc.) */
+.day-column {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 200px;
+    border: 1px solid rgba(130, 69, 191, 0.2);
+}
+
+.day-name {
+    font-weight: bold;
+    color: var(--clr-rose-light);
+    border-bottom: 2px solid var(--clr-purple-vibrant);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.compact-stream-card {
+    background: rgba(31, 31, 35, 0.8);
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    text-align: left;
+    position: relative;
+    border-left: 3px solid var(--clr-purple-soft);
+}

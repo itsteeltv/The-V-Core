@@ -139,20 +139,43 @@ h1 {
 }
 
 /* --- SKELETON LOADING & PROGRESS --- */
+/* Style du Skeleton */
 .skeleton-card {
-    background: var(--bg-card);
+    background: #1a1a1a;
     border-radius: 12px;
-    height: 320px;
     overflow: hidden;
-    position: relative;
-    border: 2px solid var(--border);
+    height: 300px; /* Aligné sur la taille de tes cartes */
 }
 
-/* L'effet de lumière qui passe */
-.skeleton-card::after {
+.skeleton-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #2a2a2a;
+}
+
+.skeleton-text {
+    height: 15px;
+    margin: 15px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    width: 80%;
+}
+
+.skeleton-text.short { width: 40%; }
+
+/* Animation de balayage (Shimmer) */
+.skeleton-pulse {
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-pulse::after {
     content: "";
     position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     transform: translateX(-100%);
     background: linear-gradient(
         90deg,
@@ -161,13 +184,12 @@ h1 {
         rgba(255, 255, 255, 0.1) 60%,
         rgba(255, 255, 255, 0)
     );
-    animation: shimmer 2s infinite;
+    animation: shimmer 1.5s infinite;
 }
 
 @keyframes shimmer {
     100% { transform: translateX(100%); }
 }
-
 /* --- TAGS & BADGES --- */
 .tags-container {
     display: flex;
@@ -441,3 +463,284 @@ img, iframe {
 }
 
 iframe { width: 100%; height: 100%; border: none; }
+
+/* Bouton Cinéma */
+.cinema-btn {
+    background: #31313c;
+    color: white;
+    border: 1px solid var(--clr-purple-soft);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.cinema-btn:hover {
+    background: var(--clr-purple-vibrant);
+    transform: translateY(-2px);
+}
+
+
+/* Animation douce pour la transition */
+#video-side {
+    transition: width 0.3s ease-in-out;
+}
+
+/* Cache le chat et agrandit la vidéo */
+.iframe-container.cinema-active #chat-wrapper {
+    display: none;
+}
+.iframe-container.cinema-active #video-side {
+    width: 100% !important;
+}
+/* Style pour l'image lazy-load */
+.lazy-img {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.lazy-img.loaded {
+    opacity: 1;
+}
+
+/* --- OPTIMISATION MOBILE POUR LE PLAYER --- */
+@media (max-width: 768px) {
+    /* On force la structure en colonne (vidéo en haut, infos en bas) */
+    .iframe-container {
+        flex-direction: column !important;
+        height: auto !important;
+        overflow-y: auto;
+    }
+
+    /* Le wrapper vidéo prend toute la largeur et une hauteur fixe (ratio 16/9) */
+    #video-side {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    #video-wrapper {
+        height: 211px !important; /* Hauteur approximative pour du 16/9 sur mobile */
+    }
+
+    /* MASQUER LE CHAT PAR DÉFAUT SUR MOBILE */
+    #chat-wrapper {
+        display: none !important;
+    }
+
+    /* Si on active le "Mode Cinéma" sur mobile, on peut imaginer réafficher le chat 
+       ou simplement agrandir encore plus la vidéo */
+    .cinema-active #chat-wrapper {
+        display: block !important;
+        width: 100% !important;
+        height: 400px !important;
+    }
+    
+    /* Ajustement des infos du streamer pour mobile */
+    #streamer-info-panel {
+        padding: 15px !important;
+    }
+    
+    #streamer-header-main {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #streamer-pfp {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Barre Multistream flottante */
+#multistream-bar {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--clr-purple-vibrant);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+#multistream-bar.visible { bottom: 30px; }
+
+#multistream-bar button {
+    background: white;
+    color: var(--clr-purple-vibrant);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Checkbox sur les cartes */
+.multistream-selector {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+}
+
+.multistream-selector input {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: var(--clr-purple-bright);
+}
+
+#multistream-bar .bar-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Bouton pour tout annuler (la croix) */
+.clear-btn {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    width: 30px;
+    height: 30px;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.clear-btn:hover {
+    background: #ff4f4f !important;
+    border-color: #ff4f4f !important;
+}
+
+/* Style du bouton de lancement quand il est actif */
+.launch-btn {
+    background: white;
+    color: var(--clr-purple-vibrant);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.launch-btn:hover {
+    transform: scale(1.05);
+    background: var(--clr-rose-light);
+}
+
+/* Bouton favori sur la carte */
+.fav-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* À l'opposé de la checkbox multistream */
+    z-index: 15;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #ccc;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.fav-btn:hover {
+    transform: scale(1.2);
+    color: #ffcc00;
+}
+
+.fav-btn.active {
+    color: #ffcc00; /* Jaune doré */
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+/* Badge Favoris pour la grille */
+.fav-section-title {
+    grid-column: 1 / -1;
+    color: var(--clr-peach);
+    font-size: 1.2rem;
+    margin: 20px 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 10px;
+}
+/* Titre des sections (Favoris vs Autres) */
+.fav-section-title {
+    grid-column: 1 / -1; /* Prend toute la largeur de la grille */
+    color: var(--clr-purple-soft);
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 30px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fav-section-title::before {
+    content: "✨";
+}
+
+/* Optionnel : Donner une lueur dorée aux cartes favorites */
+.card:has(.fav-btn.active) {
+    border-color: rgba(255, 204, 0, 0.4);
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
+}
+
+.notif-btn {
+    background: var(--bg-input);
+    border: 1px solid var(--card-border);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.notif-btn:hover {
+    background: var(--clr-purple-vibrant);
+    transform: scale(1.1);
+}
+
+.history-mode {
+    opacity: 0.9;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.history-btn {
+    background: rgba(130, 69, 191, 0.2) !important;
+    border: 1px dashed var(--clr-purple-soft) !important;
+    color: var(--clr-rose-light) !important;
+    font-size: 0.85rem !important;
+    padding: 5px 12px !important;
+    transition: 0.2s;
+}
+
+.history-btn:hover {
+    background: var(--clr-purple-vibrant) !important;
+    border-style: solid !important;
+    transform: translateY(-2px);
+}
+

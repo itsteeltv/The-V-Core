@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-Multistream - The V-Core</title>
+    <script>
+        const savedTheme = localStorage.getItem('vcore-theme') || 'default';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+    <style>
+        :root {
+            --panel-bg: #0e0e10;
+            --accent: #8245BF;
+            --text: #ffffff;
+        }
+        body, html { margin: 0; padding: 0; height: 100%; background: #000; color: var(--text); font-family: sans-serif; overflow: hidden; }
+
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Zone Vidéos */
+        #video-grid {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            background: #000;
+        }
+        .video-slot {
+            flex: 1 1 45%; /* S'adapte si 2 ou 3 streams */
+            min-width: 400px;
+            position: relative;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Zone Chat Latérale */
+        .chat-sidebar {
+            width: 340px;
+            background: var(--panel-bg);
+            border-left: 2px solid #2d2d31;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Onglets pour changer de chat */
+        .chat-tabs {
+            display: flex;
+            background: #18181b;
+            padding: 5px;
+            gap: 5px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 5px;
+            font-size: 0.8rem;
+            border: none;
+            background: #26262c;
+            color: #adadb8;
+            cursor: pointer;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+        }
+
+        #chat-container {
+            flex-grow: 1;
+        }
+        .chat-frame {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        .chat-frame.active {
+            display: block;
+        }
+
+        @media (max-width: 1000px) {
+            .main-layout { flex-direction: column; }
+            .chat-sidebar { width: 100%; height: 300px; }
+            .video-slot { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-layout">
+    <div id="video-grid"></div>
+
+    <div class="chat-sidebar">
+        <div class="chat-tabs" id="chat-tabs">
+            </div>
+        <div id="chat-container">
+            </div>
+    </div>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const streams = params.get('streams')?.split(',') || [];
+    const videoGrid = document.getElementById('video-grid');
+    const chatTabs = document.getElementById('chat-tabs');
+    const chatContainer = document.getElementById('chat-container');
+    const domain = window.location.hostname;
+
+    streams.forEach((login, index) => {
+        // 1. Création de la Vidéo
+        const videoSlot = document.createElement('div');
+        videoSlot.className = 'video-slot';
+        videoSlot.innerHTML = `<iframe src="https://player.twitch.tv/?channel=${login}&parent=${domain}&autoplay=true" allowfullscreen></iframe>`;
+        videoGrid.appendChild(videoSlot);
+
+        // 2. Création du Bouton d'onglet Chat
+        const btn = document.createElement('button');
+        btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+        btn.innerText = `💬 ${login}`;
+        btn.onclick = () => switchChat(login, btn);
+        chatTabs.appendChild(btn);
+
+        // 3. Création de l'Iframe de Chat
+        const chatFrame = document.createElement('div');
+        chatFrame.id = `chat-${login}`;
+        chatFrame.className = `chat-frame ${index === 0 ? 'active' : ''}`;
+        chatFrame.innerHTML = `<iframe src="https://www.twitch.tv/embed/${login}/chat?parent=${domain}&darkpopout" height="100%" width="100%"></iframe>`;
+        chatContainer.appendChild(chatFrame);
+    });
+
+    function switchChat(login, clickedBtn) {
+        // Désactiver tous les onglets et frames
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.chat-frame').forEach(f => f.classList.remove('active'));
+
+        // Activer l'onglet sélectionné
+        clickedBtn.classList.add('active');
+        document.getElementById(`chat-${login}`).classList.add('active');
+    }
+</script>
+
+</body>
+</html>

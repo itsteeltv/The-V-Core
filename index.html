@@ -5,18 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <title>The V-Core</title>
+    <script>
+        const savedTheme = localStorage.getItem('vcore-theme') || 'default';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
 </head>
 <body>
     <div class="container">
-        <!-- Page d'accueil -->
         <div id="homePage" class="page active">
             <header>
                 <h1>The V-Core</h1>
                 <p class="subtitle">La plateforme d'outils pour la communauté VTuber française</p>
+                
+                <div class="theme-switcher">
+                    <label for="theme-select" style="font-size: 0.9rem; color: var(--clr-peach);">🎨 Style :</label>
+                    <select id="theme-select" onchange="changeTheme(this.value)">
+                        <option value="default">V-Core (Original)</option>
+                        <option value="dark-purist">Dark Puriste</option>
+                        <option value="white-light">White Puriste</option>
+                    </select>
+                </div>
             </header>
 
-            <div class="global-stats-container">
+            <div class="global-stats-container" data-aos="zoom-in" data-aos-duration="1000">
                 <div class="global-stats-bar">
                     <span class="pulse-dot"></span> 
                     <div class="stat-item">
@@ -32,9 +45,23 @@
                 </div>
                 <p id="last-update-text" class="update-timestamp">En attente du premier scan...</p>
             </div>
+            <div class="global-search-container">
+                <input type="text" id="global-search" placeholder="🔍 Rechercher un VTuber (ex: levraisteeltv)..." 
+                    onkeypress="if(event.key === 'Enter') executeGlobalSearch()">
+                <button onclick="executeGlobalSearch()" class="search-btn-home">Rechercher</button>
+            </div>
 
+            <script>
+            function executeGlobalSearch() {
+                const query = document.getElementById('global-search').value.trim();
+                if (query) {
+                    // Redirige vers le Finder avec le paramètre de recherche
+                    window.location.href = `discvvtfr.html?search=${encodeURIComponent(query)}`;
+                }
+            }
+            </script>
             <div class="tools-grid">
-                <div class="tool-card">
+                <div class="tool-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="tool-icon">🔍</div>
                     <h2>VTubersFR Finder</h2>
                     <p>Découvrez tous les VTubers français qui streament sur Twitch</p>
@@ -43,32 +70,44 @@
                     </a>
                 </div>
 
-                <div class="tool-card">
-                    <div class="tool-icon">🔒</div>
-                    <h2>Comming Soon...</h2>
-                    <p>...</p>
-                    <div class="tool-button">
-                        ... →
-                    </div>
+                <div class="tool-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tool-icon">📅</div>
+                    <h2>Planning Manager</h2>
+                    <p>Gérez vos rendez-vous streaming et collaborez avec d'autres VTubers</p>
+                    <a href="planning.html" class="tool-button">
+                        Accéder à l'outil →
+                    </a>
                 </div>
             </div>
-
-            <div id="youtube-player" style="display: none;"></div>
-
-            <button id="music-toggle" title="Play/Pause Music" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--clr-purple-vibrant); border: 2px solid var(--clr-rose-light); cursor: pointer;">
-                <div class="equalizer" id="equalizer">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </button>
 
             <footer>
                 <p>Made with 💜 for the VTuberFR community</p>
             </footer>
         </div>
-        <script src="musicplayer.js"></script>
-        <script src="stats.js"></script>
+    </div>
+
+    <script>
+        function changeTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('vcore-theme', themeName);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('vcore-theme') || 'default';
+            document.getElementById('theme-select').value = saved;
+        });
+    </script>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800, // Durée des animations
+            offset: 120,   // Décalage pour déclencher l'animation plus tôt/tard
+            once: true     // L'animation ne se joue qu'une fois au premier scroll
+        });
+    </script>
+
+    <script src="musicplayer.js"></script>
+    <script src="stats.js"></script>
 </body>
 </html>

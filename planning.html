@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The V-Core - Planning Hebdomadaire</title>
+    <link rel="stylesheet" href="stylediscvtfr.css">
+    <link rel="stylesheet" href="planning.css">
+    <script>
+    const savedTheme = localStorage.getItem('vcore-theme') || 'default';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <a href="index.html">🏠 Accueil</a>
+        <a href="discvvtfr.html">📡 Scanner Live</a>
+    </nav>
+
+    <div class="schedule-container">
+        <header class="schedule-header">
+            <h1>📅 Planning des VTubers</h1>
+            <p>Consultez et gérez votre emploi du temps Twitch</p>
+        </header>
+        
+        <div id="auth-section" class="auth-section">
+            <button id="twitch-login-btn" class="login-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Twitch_Glitch_Logo_Black.svg" width="20">
+                Se connecter avec Twitch
+            </button>
+        </div>
+
+        <div id="add-stream-form" class="hidden add-stream-card">
+            <h3>➕ Ajouter un nouveau stream</h3>
+            <div class="form-group">
+                <input type="text" id="new-title" placeholder="Titre du live...">
+                <input type="datetime-local" id="new-date">
+                
+                <select id="new-category">
+                    <option value="509658">Just Chatting</option>
+                    <option value="509670">Art</option>
+                    <option value="21779">Talk Shows & Podcasts</option>
+                    <option value="26936">Music</option>
+                    <option value="512710">VRChat</option>
+                    <option value="509663">Special Events</option>
+                </select>
+
+                <div class="duration-group">
+                    <label style="font-size: 0.8rem; color: var(--clr-peach); display: block; margin-bottom: 5px;">Durée estimée (heures) :</label>
+                    <input type="number" id="stream-duration" value="3" min="1" max="24" step="0.5" style="width: 70px; text-align: center;">
+                </div>
+
+                <p style="margin-top: 15px; font-size: 0.9rem; color: var(--clr-rose-light);">Répéter sur plusieurs jours :</p>
+                <div class="days-selector" style="display: flex; gap: 8px; justify-content: center; margin: 10px 0 20px 0; flex-wrap: wrap;">
+                    <label class="day-check"><input type="checkbox" value="1"> L</label>
+                    <label class="day-check"><input type="checkbox" value="2"> M</label>
+                    <label class="day-check"><input type="checkbox" value="3"> Me</label>
+                    <label class="day-check"><input type="checkbox" value="4"> J</label>
+                    <label class="day-check"><input type="checkbox" value="5"> V</label>
+                    <label class="day-check"><input type="checkbox" value="6"> S</label>
+                    <label class="day-check"><input type="checkbox" value="0"> D</label>
+                </div>
+
+                <label class="checkbox-container" style="margin-bottom: 20px;">
+                    <input type="checkbox" id="is-collab">
+                    🤝 C'est une collab ?
+                </label>
+                
+                <button id="add-stream-btn" class="submit-btn">Ajouter au planning Twitch</button>
+            </div>
+        </div>
+
+        <div id="schedule-controls" class="hidden" style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
+            <div class="form-group">
+                <label style="display:block; margin-bottom:10px; font-size: 0.9rem;">Message personnalisé sur l'image :</label>
+                <input type="text" id="personal-message" placeholder="Ex: Semaine spéciale Horreur ! 🎃" style="width: 100%; max-width: 400px;">
+            </div>
+            
+            <button id="download-btn" class="submit-btn" style="background: #27ae60; margin-top: 15px;">
+                📸 Télécharger mon planning (PNG)
+            </button>
+        </div>
+
+        <div id="placeholder" class="placeholder-text">
+            <div class="icon-calendar">🗓️</div>
+            <h2>Prêt à streamer ?</h2>
+            <p>Connectez-vous pour voir votre planning actuel ou pour ajouter de nouveaux créneaux.</p>
+        </div>
+
+        <div id="schedule-viewer" class="viewer-hidden">
+            </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="schedule.js"></script>
+    <script src="twitch-api.js"></script>
+</body>
+</html>
