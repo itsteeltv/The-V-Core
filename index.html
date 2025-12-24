@@ -11,6 +11,20 @@
         const savedTheme = localStorage.getItem('vcore-theme') || 'default';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9146ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('PWA Service Worker enregistré !'))
+            .catch(err => console.log('Erreur PWA:', err));
+        });
+    }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -29,28 +43,6 @@
                 </div>
             </header>
 
-            <div class="global-stats-container" data-aos="zoom-in" data-aos-duration="1000">
-                <div class="global-stats-bar">
-                    <span class="pulse-dot"></span> 
-                    <div class="stat-item">
-                        <span class="stat-value" id="total-v-live">--</span>
-                        <span class="stat-label">VTubers en Live</span>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="total-v-viewers">--</span>
-                        <span class="stat-label">Spectateurs cumulés</span>
-                    </div>
-                    <span id="refresh-indicator" class="refresh-dot"></span>
-                </div>
-                <p id="last-update-text" class="update-timestamp">En attente du premier scan...</p>
-            </div>
-            <div class="global-search-container">
-                <input type="text" id="global-search" placeholder="🔍 Rechercher un VTuber (ex: levraisteeltv)..." 
-                    onkeypress="if(event.key === 'Enter') executeGlobalSearch()">
-                <button onclick="executeGlobalSearch()" class="search-btn-home">Rechercher</button>
-            </div>
-
             <script>
             function executeGlobalSearch() {
                 const query = document.getElementById('global-search').value.trim();
@@ -64,7 +56,7 @@
                 <div class="tool-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="tool-icon">🔍</div>
                     <h2>VTubersFR Finder</h2>
-                    <p>Découvrez tous les VTubers français qui streament sur Twitch</p>
+                    <p>Découvrez tous les VTubers français qui stream sur Twitch</p>
                     <a href="discvvtfr.html" class="tool-button">
                         Accéder à l'outil →
                     </a>
@@ -78,10 +70,67 @@
                         Accéder à l'outil →
                     </a>
                 </div>
+                <div class="tool-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tool-icon">📅</div>
+                    <h2>Clip</h2>
+                    <p>Regardez les meilleurs clips de la communauté vtubing française.</p>
+                    <a href="clip.html" class="tool-button">
+                        Accéder à l'outil →
+                    </a>
+                </div>
             </div>
+            <section class="credits-section" data-aos="fade-up">
+                <div class="divider-gradient"></div>
+                
+                <div class="dev-profile">
+                    <img src="https://pbs.twimg.com/profile_images/2003904147825811457/KnPkSolG_400x400.jpg" alt="Développeur" class="dev-img">
+                    <div class="dev-info">
+                        <span class="badge-dev">Développeur Principal</span>
+                        <h3>steeltv</h3>
+                        <p>Architecte de The V-Core</p>
+                    </div>
+                </div>
 
+                <h4 class="contributors-title">Remerciements aux contributeurs</h4>
+                <div class="contributors-grid">
+                    <div class="contributor-card">
+                        <img src="https://pbs.twimg.com/profile_images/2003171991977693184/kUOj0aad_400x400.jpg" alt="Alyia">
+                        <div class="contributor-details">
+                            <strong>Alyia</strong>
+                            <p>Idée : Tri des streams par catégories dans le VTuberFR Finder</p>
+                        </div>
+                    </div>
+
+                    <div class="contributor-card">
+                        <img src="https://pbs.twimg.com/profile_images/1753122280526290944/Kfc2-nYs_400x400.jpg" alt="SenpaiSilver">
+                        <div class="contributor-details">
+                            <strong>SenpaiSilver</strong>
+                            <p>Idée : Planning avec la possibilité de montré les stream collab + link avec Twitch</p>
+                        </div>
+                    </div>    
+                </div>
+            </br>
+                <h4 class="contributors-title">Remerciements aux Cobayes direct ou indirect</h4>
+                <div class="contributors-grid">
+                    <div class="contributor-card">
+                        <img src="https://pbs.twimg.com/profile_images/1822431408163266560/wcz70qdf_400x400.jpg" alt="MaisTheEmperor">
+                        <div class="contributor-details">
+                            <strong>Maïs The Emperor</strong>
+                            <p>Cobaye n°1 pour l'affichage du stream en direct sur la plateforme.</p>
+                        </div>
+                    </div>
+
+                    <div class="contributor-card">
+                        <img src="https://pbs.twimg.com/profile_images/1997593705713221632/TQP7b2Pg_400x400.jpg" alt="Hana Momijii">
+                        <div class="contributor-details">
+                            <strong>Hana Momijii</strong>
+                            <p>Cobaye n°2 pour la présentation du tri des catégories et l'affichage de sont stream en directe sur la plateforme</p>
+                        </div>
+                    </div>    
+                </div>
+            </section>
             <footer>
-                <p>Made with 💜 for the VTuberFR community</p>
+                <p>Fait avec 💜 pour la communauté VTuberFR</p>
             </footer>
         </div>
     </div>
@@ -107,7 +156,5 @@
         });
     </script>
 
-    <script src="musicplayer.js"></script>
-    <script src="stats.js"></script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The V-Core - Le Mur des Clips VTuberFR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="stylediscvtfr.css">
+    <link rel="stylesheet" href="clips.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="index.html">🏠 Accueil</a>
+        <a href="discvvtfr.html">📺 Découverte</a>
+    </nav>
+
+    <div class="container">
+        <header class="clips-header">
+            <h1>💜 Le Mur des Clips VTuberFR</h1>
+            <p>Les moments les plus mémorables de la communauté francophone</p>
+            <div class="filter-bar">
+                <button onclick="loadClips('7')" class="filter-btn active">Cette semaine</button>
+                <button onclick="loadClips('30')" class="filter-btn">Ce mois-ci</button>
+                <button onclick="loadClips('1')" class="filter-btn">Dernières 24h</button>
+            </div>
+        </header>
+
+        <div id="clips-container" class="clips-grid">
+            </div>
+    </div>
+
+    <div id="clip-modal" class="modal" onclick="closeClip()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeClip()">&times;</span>
+            <div id="video-wrapper" style="width: 100%; height: 100%;">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <script src="clips.js"></script>
+</body>
+</html>

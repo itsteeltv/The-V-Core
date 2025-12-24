@@ -10,141 +10,209 @@
     </script>
     <style>
         :root {
-            --panel-bg: #0e0e10;
-            --accent: #8245BF;
-            --text: #ffffff;
-        }
-        body, html { margin: 0; padding: 0; height: 100%; background: #000; color: var(--text); font-family: sans-serif; overflow: hidden; }
+    --panel-bg: #0e0e10;
+    --accent: #8245BF;
+    --text: #ffffff;
+    }
 
-        .main-layout {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
+    body, html { 
+        margin: 0; 
+        padding: 0; 
+        height: 100%; 
+        background: #000; 
+        color: var(--text); 
+        font-family: sans-serif; 
+        overflow: hidden; 
+    }
+
+    .main-layout {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* --- ZONE VIDÉOS --- */
+    #video-grid {
+        flex-grow: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        background: #000;
+    }
+
+    .video-slot {
+        flex: 1 1 45%; 
+        min-width: 400px;
+        position: relative;
+        background: #000;
+    }
+
+    iframe { width: 100%; height: 100%; border: none; }
+
+    /* --- ZONE CHAT LATÉRALE --- */
+    .chat-sidebar {
+        width: 340px;
+        background: var(--panel-bg);
+        border-left: 2px solid #2d2d31;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-tabs {
+        display: flex;
+        background: #18181b;
+        padding: 5px;
+        gap: 5px;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 10px 5px;
+        font-size: 0.8rem;
+        border: none;
+        background: #26262c;
+        color: #adadb8;
+        cursor: pointer;
+        border-radius: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: 0.2s;
+    }
+
+    .tab-btn.active {
+        background: var(--accent);
+        color: white;
+        font-weight: bold;
+    }
+
+    #chat-container {
+        flex-grow: 1;
+    }
+
+    .chat-frame {
+        display: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    .chat-frame.active {
+        display: block;
+    }
+
+    /* --- OPTIMISATION MOBILE (Tablettes et Téléphones) --- */
+    @media (max-width: 1000px) {
+        body, html { overflow-y: auto; } /* Permet le scroll sur mobile */
+        
+        .main-layout { 
+            flex-direction: column; 
+            height: auto; 
+            min-height: 100vh;
         }
 
-        /* Zone Vidéos */
         #video-grid {
-            flex-grow: 1;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            background: #000;
-        }
-        .video-slot {
-            flex: 1 1 45%; /* S'adapte si 2 ou 3 streams */
-            min-width: 400px;
-            position: relative;
-        }
-        iframe { width: 100%; height: 100%; border: none; }
-
-        /* Zone Chat Latérale */
-        .chat-sidebar {
-            width: 340px;
-            background: var(--panel-bg);
-            border-left: 2px solid #2d2d31;
-            display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Force l'empilement vertical */
+            height: auto;
         }
 
-        /* Onglets pour changer de chat */
-        .chat-tabs {
-            display: flex;
-            background: #18181b;
-            padding: 5px;
-            gap: 5px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 10px 5px;
-            font-size: 0.8rem;
-            border: none;
-            background: #26262c;
-            color: #adadb8;
-            cursor: pointer;
-            border-radius: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: 0.2s;
-        }
-        .tab-btn.active {
-            background: var(--accent);
-            color: white;
-            font-weight: bold;
+        /* Le stream principal (le 1er) prend 70% de la hauteur de l'écran */
+        .video-slot:first-child {
+            min-width: 100%;
+            height: 70vh; 
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        #chat-container {
-            flex-grow: 1;
+        /* Les streams secondaires deviennent des vignettes en dessous */
+        .video-slot:not(:first-child) {
+            min-width: 100%;
+            height: 25vh;
+            opacity: 0.7;
+            border-top: 1px solid #2d2d31;
         }
-        .chat-frame {
-            display: none;
-            width: 100%;
-            height: 100%;
+
+        /* La barre de chat passe tout en bas */
+        .chat-sidebar { 
+            width: 100%; 
+            height: 400px; 
+            border-left: none;
+            border-top: 2px solid var(--accent);
         }
-        .chat-frame.active {
+    }
+
+    /* Petit conseil "Audio Only" pour mobile */
+    .mobile-hint {
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+        .mobile-hint {
             display: block;
+            font-size: 10px;
+            color: var(--accent);
+            text-align: center;
+            padding: 5px;
+            background: #18181b;
         }
-
-        @media (max-width: 1000px) {
-            .main-layout { flex-direction: column; }
-            .chat-sidebar { width: 100%; height: 300px; }
-            .video-slot { min-width: 100%; }
-        }
+    }
     </style>
 </head>
 <body>
 
-<div class="main-layout">
-    <div id="video-grid"></div>
+    <div class="main-layout">
+        <div id="video-grid"></div>
 
-    <div class="chat-sidebar">
-        <div class="chat-tabs" id="chat-tabs">
-            </div>
-        <div id="chat-container">
-            </div>
+        <div class="chat-sidebar">
+            <div class="chat-tabs" id="chat-tabs">
+                </div>
+            <div id="chat-container">
+                </div>
+        </div>
     </div>
-</div>
 
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const streams = params.get('streams')?.split(',') || [];
-    const videoGrid = document.getElementById('video-grid');
-    const chatTabs = document.getElementById('chat-tabs');
-    const chatContainer = document.getElementById('chat-container');
-    const domain = window.location.hostname;
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const streams = params.get('streams')?.split(',') || [];
+        const videoGrid = document.getElementById('video-grid');
+        const chatTabs = document.getElementById('chat-tabs');
+        const chatContainer = document.getElementById('chat-container');
+        const domain = window.location.hostname;
 
-    streams.forEach((login, index) => {
-        // 1. Création de la Vidéo
-        const videoSlot = document.createElement('div');
-        videoSlot.className = 'video-slot';
-        videoSlot.innerHTML = `<iframe src="https://player.twitch.tv/?channel=${login}&parent=${domain}&autoplay=true" allowfullscreen></iframe>`;
-        videoGrid.appendChild(videoSlot);
+        streams.forEach((login, index) => {
+            // 1. Création de la Vidéo
+            const videoSlot = document.createElement('div');
+            videoSlot.className = 'video-slot';
+            videoSlot.innerHTML = `<iframe src="https://player.twitch.tv/?channel=${login}&parent=${domain}&autoplay=true" allowfullscreen></iframe>`;
+            videoGrid.appendChild(videoSlot);
+            
+            
+            // 2. Création du Bouton d'onglet Chat
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+            btn.innerText = `💬 ${login}`;
+            btn.onclick = () => switchChat(login, btn);
+            chatTabs.appendChild(btn);
 
-        // 2. Création du Bouton d'onglet Chat
-        const btn = document.createElement('button');
-        btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
-        btn.innerText = `💬 ${login}`;
-        btn.onclick = () => switchChat(login, btn);
-        chatTabs.appendChild(btn);
+            // 3. Création de l'Iframe de Chat
+            const chatFrame = document.createElement('div');
+            chatFrame.id = `chat-${login}`;
+            chatFrame.className = `chat-frame ${index === 0 ? 'active' : ''}`;
+            chatFrame.innerHTML = `<iframe src="https://www.twitch.tv/embed/${login}/chat?parent=${domain}&darkpopout" height="100%" width="100%"></iframe>`;
+            chatContainer.appendChild(chatFrame);
+        });
 
-        // 3. Création de l'Iframe de Chat
-        const chatFrame = document.createElement('div');
-        chatFrame.id = `chat-${login}`;
-        chatFrame.className = `chat-frame ${index === 0 ? 'active' : ''}`;
-        chatFrame.innerHTML = `<iframe src="https://www.twitch.tv/embed/${login}/chat?parent=${domain}&darkpopout" height="100%" width="100%"></iframe>`;
-        chatContainer.appendChild(chatFrame);
-    });
+        function switchChat(login, clickedBtn) {
+            // Désactiver tous les onglets et frames
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.chat-frame').forEach(f => f.classList.remove('active'));
 
-    function switchChat(login, clickedBtn) {
-        // Désactiver tous les onglets et frames
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.chat-frame').forEach(f => f.classList.remove('active'));
-
-        // Activer l'onglet sélectionné
-        clickedBtn.classList.add('active');
-        document.getElementById(`chat-${login}`).classList.add('active');
-    }
-</script>
-
+            // Activer l'onglet sélectionné
+            clickedBtn.classList.add('active');
+            document.getElementById(`chat-${login}`).classList.add('active');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </body>
 </html>

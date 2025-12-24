@@ -1,0 +1,187 @@
+/* --- GRILLE DES CLIPS --- */
+.clips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}
+
+/* --- CARTE STYLE SCAN (STREAM-CARD) --- */
+.stream-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.stream-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--clr-purple-vibrant);
+}
+
+/* Entête de la carte (Profil + Nom) */
+.card-header {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.streamer-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.streamer-pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--clr-purple-vibrant);
+    object-fit: cover;
+}
+
+.streamer-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.streamer-name {
+    font-weight: bold;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.stream-status {
+    font-size: 0.75rem;
+    color: var(--clr-purple-soft);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Zone Image / Miniature */
+.thumbnail-container {
+    position: relative;
+    aspect-ratio: 16/9;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.stream-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.stream-card:hover .stream-thumbnail {
+    transform: scale(1.05);
+}
+
+/* Overlays sur l'image */
+.viewer-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.stream-duration {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: var(--clr-purple-vibrant);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.play-btn-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(130, 69, 191, 0.3);
+    font-size: 3rem;
+    color: white;
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+.thumbnail-container:hover .play-btn-overlay {
+    opacity: 1;
+}
+
+/* Bas de la carte (Titre + Tags) */
+.card-body {
+    padding: 15px;
+}
+
+.stream-title {
+    margin: 0 0 10px 0;
+    font-size: 0.95rem;
+    color: white;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+    height: 2.8em;
+}
+
+.stream-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: var(--bg-input);
+    color: var(--clr-peach);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    border: 1px solid var(--border);
+}
+
+/* --- MODAL LECTEUR --- */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 1000px;
+    position: relative;
+    aspect-ratio: 16/9;
+    background: black;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.close-btn {
+    position: absolute;
+    top: -45px;
+    right: 0;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-btn:hover { color: var(--clr-rose-light); }

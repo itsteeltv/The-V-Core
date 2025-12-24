@@ -1,0 +1,21 @@
+{
+  "short_name": "VCore",
+  "name": "VCore VTuber Hub",
+  "icons": [
+    {
+      "src": "https://static-cdn.jtvnw.net/user-default-pictures-uv/ce3a1270-bc57-431a-9391-580190117a02-profile_image-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://static-cdn.jtvnw.net/user-default-pictures-uv/ce3a1270-bc57-431a-9391-580190117a02-profile_image-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#0e0e10",
+  "display": "standalone",
+  "theme_color": "#9146ff",
+  "description": "Suivez vos VTubers favoris et lancez des multistreams en un clic."
+}

@@ -29,6 +29,15 @@ function toggleFavorite(login) {
 }
 
 // --- UTILITAIRES ---
+
+function debounce(func, timeout = 300) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
+
 function getOptimizedThumb(url, w = 440, h = 248) {
     if (!url) return "";
     return url.replace('{width}', w).replace('{height}', h);
@@ -45,9 +54,11 @@ window.addEventListener('load', () => {
         }
     }, 60000);
 
+    const processChange = debounce(() => filterAndDisplay());
+    
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', filterAndDisplay);
+        searchInput.addEventListener('input', processChange);
     }
 });
 
@@ -121,6 +132,8 @@ async function startScan() {
         }
 
         if (status) status.innerHTML = `✅ <strong>${allCachedVTubers.length}</strong> VTubers trouvés.`;
+        displayVCoreSpotlight(allCachedVTubers); 
+
         updateCategoryMenu(allCachedVTubers);
         filterAndDisplay(); 
 
@@ -142,8 +155,13 @@ function filterAndDisplay() {
 
     const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || "";
     const selectedCategory = document.getElementById('category-filter')?.value || "all";
+    
+    // On récupère bien "sort-filter" ici
+    const sortBy = document.getElementById('sort-filter')?.value || "viewers-desc"; 
+    
     const favList = getFavorites();
 
+    // 1. Filtrage global (inchangé)
     let allFiltered = allCachedVTubers.filter(s => {
         const matchesSearch = s.user_name.toLowerCase().includes(searchTerm) || 
                              (s.title && s.title.toLowerCase().includes(searchTerm));
@@ -151,9 +169,27 @@ function filterAndDisplay() {
         return matchesSearch && matchesCategory;
     });
 
+    // 2. Application du Tri (vérifie que les 'case' correspondent aux 'value' du HTML)
+    allFiltered.sort((a, b) => {
+        switch (sortBy) {
+            case 'viewers-desc':
+                return b.viewer_count - a.viewer_count;
+            case 'viewers-asc':
+                return a.viewer_count - b.viewer_count;
+            case 'duration-desc':
+                return new Date(a.started_at) - new Date(b.started_at);
+            case 'duration-asc':
+                return new Date(b.started_at) - new Date(a.started_at);
+            default:
+                return 0;
+        }
+    });
+
+    // 3. Séparation en deux listes
     const favorites = allFiltered.filter(v => favList.includes(v.user_login));
     const others = allFiltered.filter(v => !favList.includes(v.user_login));
 
+    // 4. Vidage et Affichage
     grid.innerHTML = '';
 
     if (favorites.length > 0) {
@@ -198,6 +234,12 @@ function createCardElement(stream) {
     const favs = getFavorites();
     const isFav = favs.includes(stream.user_login);
     const isSelected = selectedVTubers.includes(stream.user_login);
+    const startTime = new Date(stream.started_at);
+    const now = new Date();
+    const diffMs = now - startTime;
+    const diffHrs = Math.floor(diffMs / 3600000);
+    const diffMins = Math.floor((diffMs % 3600000) / 60000);
+    const uptimeStr = `${diffHrs}h ${diffMins}m`;
 
     const tagsHtml = (stream.tags || []).slice(0, 3).map(tag => {
         let specialClass = "";
@@ -220,6 +262,7 @@ function createCardElement(stream) {
                 <div class="preview-container" id="preview-${stream.user_login}"></div>
                 <img src="${getOptimizedThumb(stream.thumbnail_url)}" class="thumbnail" loading="lazy">
                 <span class="viewer-tag">🔴 ${stream.viewer_count.toLocaleString()}</span>
+                <span class="uptime-tag">⏳ ${uptimeStr}</span>
             </div>
             <div class="info">
                 <img src="${stream.profile_image_url}" class="mini-pfp" 
@@ -330,6 +373,23 @@ function clearHistory() {
     updateMultistreamBar();
 }
 
+function initDragAndDrop() {
+    const container = document.getElementById('multistream-container');
+
+    Sortable.create(container, {
+        animation: 150, // Vitesse de l'animation en ms
+        ghostClass: 'sortable-ghost', // Classe appliquée à l'élément fantôme (pendant le déplacement)
+        handle: '.drag-handle', // On limite le déplacement à une petite poignée (optionnel mais conseillé)
+        onStart: function() {
+            // Optionnel : on peut masquer les iframes temporairement pour fluidifier
+            container.classList.add('is-dragging');
+        },
+        onEnd: function() {
+            container.classList.remove('is-dragging');
+        }
+    });
+}
+
 // --- LE RESTE DU CODE (PLAYER, SCROLL ETC) ---
 
 function setupInfiniteScroll() {
@@ -407,8 +467,6 @@ function forceRefresh() {
     startScan();
 }
 
-// --- CONFIGURATION (EXPORT/IMPORT) ---
-
 // Fonction pour exporter les favoris
 function exportConfig() {
     const config = {
@@ -455,4 +513,44 @@ function importConfig(event) {
     
     // Reset de l'input pour permettre de réimporter le même fichier si besoin
     event.target.value = '';
+}
+
+function displayVCoreSpotlight(streams) {
+    const spotlightContainer = document.getElementById('vtuber-spotlight');
+    if (!spotlightContainer) return;
+
+    // 1. Filtrer les petits streamers (ex: entre 1 et 20 viewers)
+    const smallStreams = streams.filter(s => s.viewer_count > 0 && s.viewer_count <= 20);
+
+    if (smallStreams.length === 0) {
+        spotlightContainer.style.display = 'none';
+        return;
+    }
+
+    // 2. Choisir un streamer au hasard
+    const lucky = smallStreams[Math.floor(Math.random() * smallStreams.length)];
+
+    // 3. Injecter le HTML (Note : on passe les datas à openPlayer pour que le théâtre fonctionne)
+    spotlightContainer.innerHTML = `
+        <div class="spotlight-card" onclick="openPlayer('${lucky.user_login}', ${lucky.viewer_count}, '${lucky.user_id}', '${lucky.profile_image_url}')">
+            <div class="spotlight-badge">✨ Coup de Projecteur</div>
+            <div class="spotlight-content">
+                <div class="spotlight-img-container">
+                    <img src="${getOptimizedThumb(lucky.thumbnail_url, 600, 337)}" class="spotlight-img">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-header">
+                        <img src="${lucky.profile_image_url}" class="spotlight-pfp" onerror="this.src='https://static-cdn.jtvnw.net/user-default-pictures-uv/ce3a1270-bc57-431a-9391-580190117a02-profile_image-70x70.png'">
+                        <div>
+                            <h3>${lucky.user_name}</h3>
+                            <span class="spotlight-viewers">🔴 ${lucky.viewer_count.toLocaleString()} viewers</span>
+                        </div>
+                    </div>
+                    <p class="spotlight-title">${lucky.title}</p>
+                    <div class="spotlight-game">${lucky.game_name}</div>
+                </div>
+            </div>
+        </div>
+    `;
+    spotlightContainer.style.display = 'block';
 }

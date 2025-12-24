@@ -18,10 +18,19 @@
         <p id="status">Prêt à scanner</p>
         
         <div class="controls">
+            
             <input type="text" id="search-input" placeholder="🔎 Chercher un pseudo...">
-            <select id="category-filter" onchange="filterAndDisplay()"><option value="all">Toutes les catégories</option></select>
+            <select id="category-filter" onchange="filterAndDisplay()">
+                <option value="all">Toutes les catégories</option>
+            </select>
+
+            <select id="sort-filter" onchange="filterAndDisplay()">
+                <option value="viewers-desc">Spectateurs (Max → Min)</option>
+                <option value="viewers-asc">Spectateurs (Min → Max)</option>
+                <option value="duration-desc">Plus longue durée</option>
+                <option value="duration-asc">Plus courte durée</option>
+            </select>
             <button id="refresh-btn" onclick="forceRefresh()">🔄 Actualiser la liste</button>
-            <button id="notif-btn" onclick="requestNotificationPermission()" class="notif-btn" title="Activer les alertes favoris">🔔</button>
         </div>
         <div class="config-actions">
             <button onclick="exportConfig()" class="btn-secondary" title="Sauvegarder mes favoris">
@@ -33,6 +42,7 @@
             </label>
             <input type="file" id="import-input" accept=".json" onchange="importConfig(event)" style="display: none;">
         </div>
+        <div id="vtuber-spotlight" style="display: none; margin-bottom: 30px;"></div>
     </header>
     
     <main id="vtuber-grid" class="grid-container">
@@ -82,7 +92,6 @@
             offset: 50 // Se déclenche rapidement pour éviter les trous blancs
         });
     </script>
-    <script src="twitch-api.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
