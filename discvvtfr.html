@@ -23,6 +23,16 @@
             <button id="refresh-btn" onclick="forceRefresh()">🔄 Actualiser la liste</button>
             <button id="notif-btn" onclick="requestNotificationPermission()" class="notif-btn" title="Activer les alertes favoris">🔔</button>
         </div>
+        <div class="config-actions">
+            <button onclick="exportConfig()" class="btn-secondary" title="Sauvegarder mes favoris">
+                📤 Exporter mes Favoris
+            </button>
+
+            <label for="import-input" class="btn-secondary" style="cursor: pointer;" title="Charger un fichier de favoris">
+                📥 Importer
+            </label>
+            <input type="file" id="import-input" accept=".json" onchange="importConfig(event)" style="display: none;">
+        </div>
     </header>
     
     <main id="vtuber-grid" class="grid-container">
