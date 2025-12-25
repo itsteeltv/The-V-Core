@@ -2,10 +2,11 @@
 let isScanningClips = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadCommunityClips();
+    // On lance le chargement avec le filtre "Semaine" par défaut
+    loadCommunityClips('week'); 
 });
 
-async function loadCommunityClips() {
+async function loadCommunityClips(period = 'week') {
     if (isScanningClips) return;
     isScanningClips = true;
 
@@ -13,7 +14,7 @@ async function loadCommunityClips() {
     container.innerHTML = `
         <div style="text-align:center; grid-column: 1/-1; padding: 50px;">
             <div class="loader-vcore"></div>
-            <p>Scan de la communauté VTubingFR... <br> <small>Récupération des clips des VTubers en live</small></p>
+            <p>Scan de la communauté VTubingFR... <br> <small>Récupération des meilleurs clips (Période: ${period})</small></p>
         </div>
     `;
 
@@ -21,11 +22,22 @@ async function loadCommunityClips() {
         const token = await getTwitchToken();
         if (!token) return;
 
+        // --- CALCUL DE LA PÉRIODE ---
+        let startedAt = "";
+        const now = new Date();
+        if (period === '24h') {
+            startedAt = new Date(now.getTime() - (24 * 60 * 60 * 1000)).toISOString();
+        } else if (period === 'week') {
+            startedAt = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString();
+        } else if (period === 'month') {
+            startedAt = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString();
+        }
+
         let vtuberIds = [];
         let cursor = "";
         
-        // Scan des lives pour trouver les VTubers
-        for (let i = 0; i < 2; i++) {
+        // Scan des lives pour trouver les VTubers (on garde ton scan actuel)
+        for (let i = 0; i < 5; i++) {
             const url = `https://api.twitch.tv/helix/streams?language=fr&first=100${cursor ? `&after=${cursor}` : ''}`;
             const res = await fetch(url, {
                 headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
@@ -47,26 +59,39 @@ async function loadCommunityClips() {
             return;
         }
 
-        const topVtubers = vtuberIds.slice(0, 15); 
+        // On augmente un peu la sélection pour avoir plus de choix
+        const topVtubers = [...new Set(vtuberIds)].slice(0, 30); 
         let allClips = [];
 
         for (const userId of topVtubers) {
-            const clipUrl = `https://api.twitch.tv/helix/clips?broadcaster_id=${userId}&first=3`; 
+            // On demande le meilleur clip (first=1) pour ce streamer sur la période donnée
+            let clipUrl = `https://api.twitch.tv/helix/clips?broadcaster_id=${userId}&first=1`;
+            if (startedAt) clipUrl += `&started_at=${startedAt}`;
+
             const clipRes = await fetch(clipUrl, {
                 headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
             });
             const clipData = await clipRes.json();
-            if (clipData.data) allClips.push(...clipData.data);
+            
+            // On ajoute le clip seulement s'il existe (évite les doublons de créateurs grâce à first=1)
+            if (clipData.data && clipData.data.length > 0) {
+                allClips.push(clipData.data[0]);
+            }
         }
 
+        // Récupération des photos de profil
         const finalUserIds = [...new Set(allClips.map(c => c.broadcaster_id))];
-        const usersRes = await fetch(`https://api.twitch.tv/helix/users?id=${finalUserIds.join('&id=')}`, {
-            headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
-        });
-        const usersData = await usersRes.json();
         const profilePics = {};
-        usersData.data.forEach(u => profilePics[u.id] = u.profile_image_url);
+        
+        if (finalUserIds.length > 0) {
+            const usersRes = await fetch(`https://api.twitch.tv/helix/users?id=${finalUserIds.join('&id=')}`, {
+                headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
+            });
+            const usersData = await usersRes.json();
+            usersData.data.forEach(u => profilePics[u.id] = u.profile_image_url);
+        }
 
+        // Tri final par nombre de vues décroissant
         allClips.sort((a, b) => b.view_count - a.view_count);
 
         renderClips(allClips, profilePics);
@@ -87,12 +112,9 @@ function renderClips(clips, profilePics) {
         const card = document.createElement('div');
         card.className = 'stream-card clip-card-custom'; 
         
-        // --- CRUCIAL POUR LES FILTRES ---
-        // On ajoute les data-attributes que ton script.js utilise pour filtrer
         card.setAttribute('data-name', clip.broadcaster_name.toLowerCase());
         card.setAttribute('data-title', clip.title.toLowerCase());
         card.setAttribute('data-category', clip.game_id || 'all'); 
-        // -------------------------------
 
         const pfp = profilePics[clip.broadcaster_id] || "https://static-cdn.jtvnw.net/user-default-pictures-uv/ce3a1270-bc57-431a-9391-580190117a02-profile_image-70x70.png";
 
@@ -102,7 +124,7 @@ function renderClips(clips, profilePics) {
                     <img src="${pfp}" class="streamer-pfp">
                     <div class="streamer-details">
                         <span class="streamer-name">${clip.broadcaster_name}</span>
-                        <span class="stream-status">🎬 CLIP</span>
+                        <span class="stream-status">🎬 CLIP UNIQUE</span>
                     </div>
                 </div>
             </div>
@@ -118,15 +140,12 @@ function renderClips(clips, profilePics) {
                 <h3 class="stream-title" title="${clip.title}">${clip.title}</h3>
                 <div class="stream-tags">
                     <span class="tag">#VTuberFR</span>
-                    <span class="tag">#Pépite</span>
                 </div>
             </div>
         `;
         container.appendChild(card);
     });
 
-    // --- CRUCIAL ---
-    // On relance la fonction de filtrage de script.js pour appliquer les filtres actuels aux nouveaux clips
     if (typeof filterAndDisplay === 'function') {
         filterAndDisplay();
     }

@@ -185,3 +185,64 @@
 }
 
 .close-btn:hover { color: var(--clr-rose-light); }
+
+/* Style pour le bouton actif */
+.filter-buttons .clip-btn.active {
+    background-color: #3f3f4a; /* Plus clair que le bouton normal */
+    border: 2px solid #8245BF; /* Bordure violette Twitch */
+    color: #fff;
+    box-shadow: 0 0 10px rgba(130, 69, 191, 0.3);
+}
+
+/* Agrandissement de la modal pour le clip */
+#clip-modal {
+    padding: 20px;
+}
+
+#video-wrapper {
+    width: 90%;          /* Augmente la largeur (était probablement à 70-80%) */
+    max-width: 1200px;   /* Limite pour les grands écrans */
+    aspect-ratio: 16 / 9; /* Garde le format vidéo standard */
+    margin: 0 auto;
+}
+
+/* Style pour le bouton de filtre sélectionné */
+.clip-btn.active {
+    background-color: #8245BF !important; /* Violet plus prononcé */
+    border: 2px solid white;
+    font-weight: bold;
+}
+
+/* On réutilise ton style de bouton pour le téléchargement */
+#download-btn {
+    background-color: #8245BF; /* Violet Twitch pour différencier */
+    font-size: 0.9rem;
+}
+
+#download-btn:hover {
+    background-color: #9c5cdb;
+}
+
+/* Style unifié pour les boutons de navigation */
+.planning-btn, .clip-btn, .home-btn, .scan-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    background: #31313c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+/* Effet au survol */
+.planning-btn:hover, .clip-btn:hover, .home-btn:hover, .scan-btn:hover{
+    background: var(--clr-purple-vibrant);
+}

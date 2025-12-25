@@ -9,19 +9,19 @@
     <link rel="stylesheet" href="clips.css">
 </head>
 <body>
-    <nav class="main-nav">
-        <a href="index.html">🏠 Accueil</a>
-        <a href="discvvtfr.html">📺 Découverte</a>
-    </nav>
+    <a href="index.html" class="home-btn">🏠 Accueil Plateforme</a>
+    <a href="discvvtfr.html" class="scan-btn">🔍 VTuberFR Finder</a>
+    <a href="planning.html" class="planning-btn">📅 Planning Creator</a>
+    <a href="clip.html" class="clip-btn">📼 Meilleur Clip</a>
 
     <div class="container">
         <header class="clips-header">
             <h1>💜 Le Mur des Clips VTuberFR</h1>
             <p>Les moments les plus mémorables de la communauté francophone</p>
-            <div class="filter-bar">
-                <button onclick="loadClips('7')" class="filter-btn active">Cette semaine</button>
-                <button onclick="loadClips('30')" class="filter-btn">Ce mois-ci</button>
-                <button onclick="loadClips('1')" class="filter-btn">Dernières 24h</button>
+            <div class="filter-buttons">
+                <button class="clip-btn" onclick="loadCommunityClips('week')">Cette semaine</button>
+                <button class="clip-btn" onclick="loadCommunityClips('month')">Ce mois-ci</button>
+                <button class="clip-btn" onclick="loadCommunityClips('24h')">Dernières 24h</button>
             </div>
         </header>
 
@@ -32,8 +32,8 @@
     <div id="clip-modal" class="modal" onclick="closeClip()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeClip()">&times;</span>
-            <div id="video-wrapper" style="width: 100%; height: 100%;">
-                </div>
+            
+            <div id="video-wrapper"></div>
         </div>
     </div>
 

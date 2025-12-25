@@ -417,8 +417,14 @@ img, iframe {
     border-left: 3px solid var(--clr-purple-soft);
 }
 
-.home-btn {
-    position: absolute;
+/* Style unifié pour les boutons de navigation */
+.planning-btn, .clip-btn, .home-btn, .scan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
     top: 20px;
     left: 20px;
     text-decoration: none;
@@ -430,8 +436,9 @@ img, iframe {
     transition: background 0.2s;
 }
 
-.home-btn:hover { 
-    background: var(--clr-purple-vibrant); 
+/* Effet au survol */
+.planning-btn:hover, .clip-btn:hover, .home-btn:hover, .scan-btn:hover{
+    background: var(--clr-purple-vibrant);
 }
 
 .viewer-badge {

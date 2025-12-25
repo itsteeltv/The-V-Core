@@ -426,6 +426,31 @@ async function openPlayer(login, viewers, userId, pfpUrl) {
     fetchExtraDetails(login, userId);
 }
 
+async function fetchExtraDetails(login, userId) {
+    const token = await getTwitchToken();
+    try {
+        const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${login}`, {
+            headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
+        });
+        const userData = await userRes.json();
+        const user = userData.data[0];
+
+        if (user) {
+            document.getElementById('streamer-link').href = `https://twitch.tv/${login}`;
+            document.getElementById('streamer-name').innerText = user.display_name;
+            document.getElementById('streamer-pfp').src = user.profile_image_url;
+            document.getElementById('streamer-bio').innerText = user.description || "Aucune biographie disponible.";
+            
+            const targetId = userId || user.id;
+            const followRes = await fetch(`https://api.twitch.tv/helix/channels/followers?broadcaster_id=${targetId}`, {
+                headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
+            });
+            const followData = await followRes.json();
+            document.getElementById('streamer-followers').innerText = `${followData.total.toLocaleString()} followers`;
+        }
+    } catch (err) { console.error("Erreur lors de la récupération des détails:", err); }
+}
+
 function closePlayer(updateUrl = true) {
     if (viewerUpdateInterval) clearInterval(viewerUpdateInterval);
     const theater = document.getElementById('theater-view');
@@ -554,3 +579,35 @@ function displayVCoreSpotlight(streams) {
     `;
     spotlightContainer.style.display = 'block';
 }
+
+window.getVTuberIdsFromCache = async function(token) {
+    const cacheKeys = ['vcore_cache', 'vcore_clips_cache'];
+    let potentialIds = new Set();
+
+    // 1. Extraction des IDs du cache
+    cacheKeys.forEach(key => {
+        const rawData = localStorage.getItem(key) || sessionStorage.getItem(key);
+        if (rawData) {
+            try {
+                const parsed = JSON.parse(rawData);
+                const list = Array.isArray(parsed) ? parsed : (parsed.data || []);
+                list.forEach(item => {
+                    const id = item.user_id || item.broadcaster_id;
+                    if (id) potentialIds.add(id);
+                });
+            } catch (e) { console.error("Erreur cache:", e); }
+        }
+    });
+
+    if (potentialIds.size === 0) return [];
+
+    // 2. VERIFICATION TWITCH : On s'assure qu'ils sont bien des VTubers
+    const idsArray = Array.from(potentialIds).slice(0, 100);
+    const usersRes = await fetch(`https://api.twitch.tv/helix/users?id=${idsArray.join('&id=')}`, {
+        headers: { 'Client-ID': CLIENT_ID, 'Authorization': `Bearer ${token}` }
+    });
+    const usersData = await usersRes.json();
+    
+    // On ne garde que ceux qui ont "VTuber" dans leur description ou qui sont en live avec le tag
+    return usersData.data.map(u => u.id);
+};

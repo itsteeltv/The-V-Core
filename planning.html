@@ -13,10 +13,10 @@
 </head>
 <body>
 
-    <nav class="main-nav">
-        <a href="index.html">🏠 Accueil</a>
-        <a href="discvvtfr.html">📡 Scanner Live</a>
-    </nav>
+    <a href="index.html" class="home-btn">🏠 Accueil Plateforme</a>
+    <a href="discvvtfr.html" class="scan-btn">🔍 VTuberFR Finder</a>
+    <a href="planning.html" class="planning-btn">📅 Planning Creator</a>
+    <a href="clip.html" class="clip-btn">📼 Meilleur Clip</a>
 
     <div class="schedule-container">
         <header class="schedule-header">
@@ -72,10 +72,6 @@
         </div>
 
         <div id="schedule-controls" class="hidden" style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
-            <div class="form-group">
-                <label style="display:block; margin-bottom:10px; font-size: 0.9rem;">Message personnalisé sur l'image :</label>
-                <input type="text" id="personal-message" placeholder="Ex: Semaine spéciale Horreur ! 🎃" style="width: 100%; max-width: 400px;">
-            </div>
             
             <button id="download-btn" class="submit-btn" style="background: #27ae60; margin-top: 15px;">
                 📸 Télécharger mon planning (PNG)
@@ -94,6 +90,5 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="schedule.js"></script>
-    <script src="twitch-api.js"></script>
 </body>
 </html>

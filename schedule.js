@@ -160,7 +160,7 @@ function renderSchedule(segments) {
                         <div class="category">${seg.category ? seg.category.name : 'Gaming'}</div>
                         <div class="stream-title">${seg.title}</div>
                         <div class="card-actions">
-                             <button onclick="deleteSegment('${seg.id}')" title="Supprimer">🗑️</button>
+                             <button class="delete-btn" onclick="deleteSegment('${seg.id}')" title="Supprimer">🗑️</button>
                         </div>
                     </div>
                 `;
