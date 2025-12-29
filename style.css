@@ -149,6 +149,9 @@ h1 {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(12px);
+    align-content: center;
+    align-items: center;
+    justify-content: center;
 }
 
 .tool-card:hover {
@@ -391,3 +394,142 @@ footer {
     .dev-profile { flex-direction: column; text-align: center; }
     .dev-info { text-align: center; }
 }
+
+/* =========================================
+   V-ROULETTE STYLES (HOME)
+   ========================================= */
+
+/* Section de la roulette */
+.v-roulette-section {
+    margin: 60px auto;
+    padding: 40px 20px;
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 30px;
+    backdrop-filter: blur(15px);
+    max-width: 600px !important;
+}
+
+/* Zone d'affichage du résultat */
+.roulette-display {
+    width: 100%;
+    max-width: 400px;
+    min-height: 300px;
+    margin: 30px auto;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px dashed var(--clr-purple-vibrant);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Le point d'interrogation qui attend */
+.placeholder-wheel {
+    font-size: 6rem;
+    color: var(--clr-purple-bright);
+    font-weight: bold;
+    text-shadow: 0 0 20px var(--clr-purple-vibrant);
+}
+
+/* État quand on clique sur "Lancer" */
+.spinning-active {
+    border-style: solid;
+    border-color: var(--clr-purple-bright);
+    box-shadow: 0 0 40px rgba(167, 92, 242, 0.2);
+}
+
+.spinning-active .placeholder-wheel {
+    animation: roulette-spin 0.12s linear infinite;
+    filter: blur(2px);
+}
+
+/* Animation de rotation rapide */
+@keyframes roulette-spin {
+    0% { transform: rotateY(0deg) scale(1); }
+    50% { transform: rotateY(180deg) scale(1.1); }
+    100% { transform: rotateY(360deg) scale(1); }
+}
+
+/* --- La Carte de Résultat --- */
+.result-card {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-main);
+    border-radius: 18px;
+    overflow: hidden;
+    animation: revealResult 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    border: 1px solid var(--card-border);
+}
+
+/* Animation d'apparition "Pop" */
+@keyframes revealResult {
+    0% { transform: scale(0.7) translateY(40px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.result-card img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-bottom: 3px solid var(--clr-purple-vibrant);
+}
+
+/* Bouton principal de la roue */
+#spin-button {
+    background: linear-gradient(135deg, var(--clr-purple-vibrant), var(--clr-purple-bright));
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+#spin-button:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(130, 69, 191, 0.4);
+    filter: brightness(1.1);
+}
+
+#spin-button:disabled {
+    background: #444;
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: scale(0.98);
+}
+
+/* Bouton "VOIR" dans la carte résultat */
+.go-live-btn {
+    background: var(--clr-purple-vibrant);
+    color: white !important;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.go-live-btn:hover {
+    background: var(--clr-purple-bright);
+    transform: scale(1.05);
+}
+
+/* Adaptations spécifiques aux thèmes */
+[data-theme="white-light"] .roulette-display {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="cyberpunk"] .v-roulette-section {
+    border-color: var(--clr-rose-light);
+    box-shadow: 0 0 20px var(--clr-purple-vibrant);
+}
+

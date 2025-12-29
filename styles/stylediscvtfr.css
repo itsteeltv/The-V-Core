@@ -1,0 +1,982 @@
+/* --- PALETTE DE COULEURS ET VARIABLES --- */
+:root {
+    /* Nouvelle Palette Intégrée */
+    --clr-rose-light: #F2BBE3;
+    --clr-purple-soft: #D288F2;
+    --clr-purple-vibrant: #8245BF;
+    --clr-purple-bright: #A75CF2;
+    --clr-peach: #F2C8C4;
+
+    /* Application aux variables du site */
+    --bg-main: #0e0e10;        /* Fond Twitch sombre */
+    --bg-card: #1f1f23;        /* Fond des cartes */
+    --bg-input: #18181b;       /* Fond des inputs */
+    --accent: var(--clr-purple-vibrant); 
+    --accent-hover: var(--clr-purple-bright);
+    --text-main: var(--clr-rose-light);
+    --text-muted: var(--clr-peach);
+    --status-red: #eb0400;
+    --border: #303038;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+header { 
+    text-align: center; 
+    margin-bottom: 40px; 
+    padding-top: 40px; 
+}
+
+h1 { 
+    font-size: 2.2rem; 
+    font-weight: 700; 
+    margin-bottom: 8px; 
+    color: var(--clr-purple-soft); 
+}
+
+#status { 
+    color: var(--text-muted); 
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    display: block;
+}
+
+/* --- BARRE DE RECHERCHE ET FILTRES --- */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+#search-input {
+    width: 350px;
+    padding: 10px 15px 10px 40px; 
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bg-input);
+    color: white;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+    /* Icône colorée avec la couleur Pêche de la palette */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23F2C8C4" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: 12px center;
+}
+
+#category-filter {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bg-input);
+    color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+#search-input:focus, #category-filter:focus {
+    outline: none;
+    border-color: var(--clr-purple-bright);
+    background-color: #000;
+}
+
+#refresh-btn {
+    padding: 11px 20px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#refresh-btn:hover { 
+    background: var(--accent-hover); 
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(167, 92, 242, 0.4);
+}
+
+/* --- GRILLE DE CARTES --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    max-width: 1400px;
+    margin: 40px auto;
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    border: 2px solid var(--accent); 
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--clr-rose-light); 
+    box-shadow: 0 0 20px rgba(130, 69, 191, 0.6); 
+}
+
+/* --- SKELETON LOADING & PROGRESS --- */
+/* Style du Skeleton */
+.skeleton-card {
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 300px; /* Aligné sur la taille de tes cartes */
+}
+
+.skeleton-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #2a2a2a;
+}
+
+.skeleton-text {
+    height: 15px;
+    margin: 15px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    width: 80%;
+}
+
+.skeleton-text.short { width: 40%; }
+
+/* Animation de balayage (Shimmer) */
+.skeleton-pulse {
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-pulse::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.05) 20%,
+        rgba(255, 255, 255, 0.1) 60%,
+        rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    100% { transform: translateX(100%); }
+}
+/* --- TAGS & BADGES --- */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+    height: 22px; /* Garde une hauteur fixe pour l'alignement */
+    overflow: hidden;
+}
+.error-notice {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    background: rgba(235, 4, 0, 0.1);
+    border: 1px dashed var(--status-red);
+    border-radius: 12px;
+    color: var(--clr-rose-light);
+    font-size: 1.1rem;
+}
+.tag-badge {
+    background: rgba(167, 139, 250, 0.15);
+    color: var(--clr-rose-light);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* Couleur spéciale pour certains tags importants */
+.tag-badge.tag-fr { border-color: #4b5dff; color: #ffffff; color: #ff4b4b }
+.tag-badge.tag-asmr { border-color: #00d1ff; color: #00d1ff; }
+
+/* --- MINIATURE ET PREVIEW (SANS BLUR) --- */
+.thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; 
+    background: #000;
+    overflow: hidden;
+}
+
+.thumbnail {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+}
+
+.preview-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.2s ease;
+    background: #000;
+    pointer-events: none;
+}
+
+img, iframe {
+    filter: none !important; /* Force la suppression du blur */
+}
+
+.card:hover .thumbnail { opacity: 0; }
+.card:hover .preview-container { opacity: 1; }
+
+.viewer-tag {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 3;
+}
+
+/* --- INFOS DU STREAM --- */
+.info {
+    padding: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.mini-pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--clr-purple-soft);
+}
+
+.stream-details { flex: 1; min-width: 0; }
+
+.streamer-name { 
+    margin: 0; 
+    font-weight: 600; 
+    color: var(--clr-purple-soft);
+    font-size: 1rem;
+}
+
+.game-name { 
+    color: var(--text-muted); 
+    font-size: 0.85rem; 
+    display: block; 
+}
+
+.stream-title {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- MODE THEATRE (Overlay) --- */
+.hidden { display: none !important; }
+
+#theater-view {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.theater-header {
+    height: 50px;
+    background: #18181b;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--accent);
+}
+
+.close-btn {
+    background: var(--status-red);
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-right: 20px;
+}
+
+#theater-title { 
+    font-weight: bold; 
+    font-size: 1.2rem; 
+    color: var(--clr-rose-light);
+}
+
+.iframe-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+#video-wrapper { flex: 4; }
+#chat-wrapper { 
+    flex: 1; 
+    min-width: 300px; 
+    border-left: 1px solid var(--border); 
+    background: #18181b;
+}
+
+#video-side {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #0e0e10;
+}
+
+#streamer-info-panel {
+    padding: 20px;
+    background: #18181b;
+    border-top: 1px solid var(--accent);
+}
+
+#streamer-header-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+#streamer-pfp {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--clr-purple-bright);
+}
+
+#streamer-name {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--clr-purple-soft);
+}
+
+#streamer-followers {
+    margin: 0;
+    color: var(--clr-peach);
+    font-size: 0.9rem;
+}
+
+#streamer-bio {
+    color: var(--text-main);
+    line-height: 1.5;
+    font-size: 1rem;
+    background: #0e0e10;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid var(--clr-purple-soft);
+}
+
+/* Style unifié pour les boutons de navigation */
+.planning-btn, .clip-btn, .home-btn, .scan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    background: #31313c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+/* Effet au survol */
+.planning-btn:hover, .clip-btn:hover, .home-btn:hover, .scan-btn:hover{
+    background: var(--clr-purple-vibrant);
+}
+
+.viewer-badge {
+    background: rgba(235, 4, 0, 0.15);
+    color: #ff4a4a;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 1px solid #eb0400;
+}
+
+.share-btn {
+    background: #31313c;
+    color: white;
+    border: 1px solid #454552;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.share-btn:hover {
+    background: #454552;
+    border-color: var(--clr-purple-bright);
+    color: var(--clr-rose-light);
+}
+
+iframe { width: 100%; height: 100%; border: none; }
+
+/* Bouton Cinéma */
+.cinema-btn {
+    background: #31313c;
+    color: white;
+    border: 1px solid var(--clr-purple-soft);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.cinema-btn:hover {
+    background: var(--clr-purple-vibrant);
+    transform: translateY(-2px);
+}
+
+
+/* Animation douce pour la transition */
+#video-side {
+    transition: width 0.3s ease-in-out;
+}
+
+/* Cache le chat et agrandit la vidéo */
+.iframe-container.cinema-active #chat-wrapper {
+    display: none;
+}
+.iframe-container.cinema-active #video-side {
+    width: 100% !important;
+}
+/* Style pour l'image lazy-load */
+.lazy-img {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.lazy-img.loaded {
+    opacity: 1;
+}
+
+/* --- OPTIMISATION MOBILE POUR LE PLAYER --- */
+@media (max-width: 768px) {
+    /* On force la structure en colonne (vidéo en haut, infos en bas) */
+    .iframe-container {
+        flex-direction: column !important;
+        height: auto !important;
+        overflow-y: auto;
+    }
+
+    /* Le wrapper vidéo prend toute la largeur et une hauteur fixe (ratio 16/9) */
+    #video-side {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    #video-wrapper {
+        height: 211px !important; /* Hauteur approximative pour du 16/9 sur mobile */
+    }
+
+    /* MASQUER LE CHAT PAR DÉFAUT SUR MOBILE */
+    #chat-wrapper {
+        display: none !important;
+    }
+
+    /* Si on active le "Mode Cinéma" sur mobile, on peut imaginer réafficher le chat 
+       ou simplement agrandir encore plus la vidéo */
+    .cinema-active #chat-wrapper {
+        display: block !important;
+        width: 100% !important;
+        height: 400px !important;
+    }
+    
+    /* Ajustement des infos du streamer pour mobile */
+    #streamer-info-panel {
+        padding: 15px !important;
+    }
+    
+    #streamer-header-main {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #streamer-pfp {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Barre Multistream flottante */
+#multistream-bar {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--clr-purple-vibrant);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+#multistream-bar.visible { bottom: 30px; }
+
+#multistream-bar button {
+    background: white;
+    color: var(--clr-purple-vibrant);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Checkbox sur les cartes */
+.multistream-selector {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+}
+
+.multistream-selector input {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: var(--clr-purple-bright);
+}
+
+#multistream-bar .bar-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Bouton pour tout annuler (la croix) */
+.clear-btn {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    width: 30px;
+    height: 30px;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.clear-btn:hover {
+    background: #ff4f4f !important;
+    border-color: #ff4f4f !important;
+}
+
+/* Style du bouton de lancement quand il est actif */
+.launch-btn {
+    background: white;
+    color: var(--clr-purple-vibrant);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.launch-btn:hover {
+    transform: scale(1.05);
+    background: var(--clr-rose-light);
+}
+
+/* Bouton favori sur la carte */
+.fav-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* À l'opposé de la checkbox multistream */
+    z-index: 15;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #ccc;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.fav-btn:hover {
+    transform: scale(1.2);
+    color: #ffcc00;
+}
+
+.fav-btn.active {
+    color: #ffcc00; /* Jaune doré */
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+/* Badge Favoris pour la grille */
+.fav-section-title {
+    grid-column: 1 / -1;
+    color: var(--clr-peach);
+    font-size: 1.2rem;
+    margin: 20px 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 10px;
+}
+/* Titre des sections (Favoris vs Autres) */
+.fav-section-title {
+    grid-column: 1 / -1; /* Prend toute la largeur de la grille */
+    color: var(--clr-purple-soft);
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 30px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fav-section-title::before {
+    content: "✨";
+}
+
+/* Optionnel : Donner une lueur dorée aux cartes favorites */
+.card:has(.fav-btn.active) {
+    border-color: rgba(255, 204, 0, 0.4);
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
+}
+
+.notif-btn {
+    background: var(--bg-input);
+    border: 1px solid var(--card-border);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.notif-btn:hover {
+    background: var(--clr-purple-vibrant);
+    transform: scale(1.1);
+}
+
+.history-mode {
+    opacity: 0.9;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.history-btn {
+    background: rgba(130, 69, 191, 0.2) !important;
+    border: 1px dashed var(--clr-purple-soft) !important;
+    color: var(--clr-rose-light) !important;
+    font-size: 0.85rem !important;
+    padding: 5px 12px !important;
+    transition: 0.2s;
+}
+
+.history-btn:hover {
+    background: var(--clr-purple-vibrant) !important;
+    border-style: solid !important;
+    transform: translateY(-2px);
+}
+
+.config-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    align-content: center;
+}
+
+.config-actions {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.btn-secondary {
+    background: #323232;
+    color: white;
+    border: 1px solid #444;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #444;
+}
+
+.card img {
+    content-visibility: auto; /* Le navigateur ne calcule le rendu que quand l'image approche de l'écran */
+    aspect-ratio: 16 / 9;
+    background: #1f1f23; /* Couleur de chargement avant que l'image arrive */
+}
+
+/* --- SECTION COUP DE PROJECTEUR --- */
+#vtuber-spotlight {
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    display: none; /* Affiché par JS */
+    animation: fadeInDown 0.8s ease;
+}
+
+.spotlight-card {
+    background: linear-gradient(135deg, rgba(130, 69, 191, 0.2) 0%, rgba(31, 31, 35, 0.9) 100%);
+    border: 2px solid var(--clr-purple-vibrant);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.spotlight-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    border-color: var(--clr-rose-light);
+    box-shadow: 0 15px 40px rgba(130, 69, 191, 0.4);
+}
+
+/* Badge "✨ Coup de Projecteur" */
+.spotlight-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--clr-purple-vibrant);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    z-index: 10;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.spotlight-content {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+
+/* Partie Image (Thumbnail) */
+.spotlight-img-container {
+    flex: 1.2;
+    position: relative;
+    min-height: 250px;
+}
+
+.spotlight-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
+
+/* Partie Infos (Texte) */
+.spotlight-info {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(31, 31, 35, 0.5);
+}
+
+.spotlight-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.spotlight-pfp {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 3px solid var(--clr-purple-vibrant);
+    background: var(--bg-main);
+}
+
+.spotlight-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--clr-rose-light);
+}
+
+.spotlight-viewers {
+    font-weight: bold;
+    color: #ff4f4f; /* Rouge Twitch pour le live */
+    font-size: 0.95rem;
+}
+
+.spotlight-title {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: white;
+    margin: 10px 0 15px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.spotlight-game {
+    display: inline-block;
+    background: rgba(167, 92, 242, 0.2);
+    color: var(--clr-peach);
+    padding: 5px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(167, 92, 242, 0.3);
+}
+
+/* Animation d'entrée */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Mobile */
+@media (max-width: 850px) {
+    .spotlight-content {
+        flex-direction: column;
+    }
+    .spotlight-img-container {
+        min-height: 200px;
+    }
+    .spotlight-img {
+        mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    }
+    .spotlight-info {
+        padding: 20px;
+    }
+    .spotlight-header h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Style pour les menus déroulants (Filtres et Tri) */
+#category-filter, 
+#sort-filter {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 10px 15px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+    appearance: none; /* Supprime le style par défaut du navigateur */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    padding-right: 35px;
+}
+
+/* Effet au survol et au focus */
+#category-filter:hover, 
+#sort-filter:hover,
+#category-filter:focus, 
+#sort-filter:focus {
+    border-color: var(--clr-purple-vibrant);
+    box-shadow: 0 0 8px rgba(130, 69, 191, 0.3);
+    background-color: #242428;
+}
+
+/* Style des options (selon le navigateur, le style est limité) */
+#category-filter option, 
+#sort-filter option {
+    background-color: var(--bg-main);
+    color: white;
+    padding: 10px;
+}
+
+/* Alignement dans la barre de contrôles */
+.controls {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}

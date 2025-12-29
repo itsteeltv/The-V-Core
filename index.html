@@ -43,15 +43,6 @@
                 </div>
             </header>
 
-            <script>
-            function executeGlobalSearch() {
-                const query = document.getElementById('global-search').value.trim();
-                if (query) {
-                    // Redirige vers le Finder avec le paramètre de recherche
-                    window.location.href = `discvvtfr.html?search=${encodeURIComponent(query)}`;
-                }
-            }
-            </script>
             <div class="tools-grid">
                 <div class="tool-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="tool-icon">🔍</div>
@@ -79,6 +70,24 @@
                     </a>
                 </div>
             </div>
+        </br>
+            <div class="divider-gradient"></div>
+            <section class="v-roulette-section container" style="text-align: center;">
+                
+                <h2 style="color: var(--clr-purple-soft);">🎰 V-Roulette FR</h2>
+                <p class="subtitle">Tu ne sais pas qui regarder ? Laisse le destin choisir un VTuber FR en live !</p>
+
+                <div id="roulette-display" class="roulette-display">
+                    <div class="placeholder-wheel">?</div>
+                </div>
+
+                <button id="spin-button" onclick="spinTheWheel()">🎰 Lancer la roue</button>
+                <audio id="spin-audio" src="item-roulette.mp3"></audio>
+            </section>
+        </br>
+
+
+
             <section class="credits-section" data-aos="fade-up">
                 <div class="divider-gradient"></div>
                 
@@ -108,6 +117,14 @@
                             <p>Idée : Planning avec la possibilité de montré les stream collab + link avec Twitch</p>
                         </div>
                     </div>    
+                
+                    <div class="contributor-card">
+                        <img src="https://pbs.twimg.com/profile_images/1972726006021570560/F8pNRKoh_400x400.jpg" alt="Ryoko-san">
+                        <div class="contributor-details">
+                            <strong>Ryoko-san</strong>
+                            <p>Idée : Rajoutez du gambling pour afficher un vtuberfr aléatoirement</p>
+                        </div>
+                    </div>
                 </div>
             </br>
                 <h4 class="contributors-title">Remerciements aux Cobayes direct ou indirect</h4>
@@ -135,18 +152,7 @@
         </div>
     </div>
 
-    <script>
-        function changeTheme(themeName) {
-            document.documentElement.setAttribute('data-theme', themeName);
-            localStorage.setItem('vcore-theme', themeName);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('vcore-theme') || 'default';
-            document.getElementById('theme-select').value = saved;
-        });
-    </script>
-
+    <script src="index.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         AOS.init({
