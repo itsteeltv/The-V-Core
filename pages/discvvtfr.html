@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTuberFR TV</title>
+    <link rel="stylesheet" href="../styles/stylediscvtfr.css">
+    <link rel="shortcut icon" href="../favicon.ico" />
+    <script>
+        const savedTheme = localStorage.getItem('vcore-theme') || 'default';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</head>
+<body>
+    <header>
+        <div class="main-navbar">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-logo">
+                    <span class="logo-icon">🔍</span>
+                    <span class="logo-text">Vtuber <span class="highlight">Finder</span></span>
+                </a>       
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="home"></i> <span>Accueil</span>
+                    </a>
+                    <a href="../pages/discvvtfr.html" class="nav-link active">
+                        <i data-lucide="search"></i> <span>Finder</span>
+                    </a>
+                    <a href="../pages/planning.html" class="nav-link">
+                        <i data-lucide="calendar"></i> <span>Planning</span>
+                    </a>
+                    <a href="../pages/clip.html" class="nav-link">
+                        <i data-lucide="clapperboard"></i> <span>Clips</span>
+                    </a>
+
+                    <div class="nav-actions">
+                        <button id="theme-cycle-btn" class="theme-btn" title="Changer l'ambiance">
+                            <i data-lucide="palette"></i>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+
+
+        <h1>VTubers Français TV 📺</h1>
+        <p id="status">Prêt à scanner</p>
+        
+        <div class="controls">
+            
+            <input type="text" id="search-input" placeholder="🔎 Chercher un pseudo...">
+            <select id="category-filter" onchange="filterAndDisplay()">
+                <option value="all">Toutes les catégories</option>
+            </select>
+
+            <select id="sort-filter" onchange="filterAndDisplay()">
+                <option value="viewers-desc">Spectateurs (Max → Min)</option>
+                <option value="viewers-asc">Spectateurs (Min → Max)</option>
+                <option value="duration-desc">Plus longue durée</option>
+                <option value="duration-asc">Plus courte durée</option>
+            </select>
+            <button id="refresh-btn" onclick="forceRefresh()">🔄 Actualiser la liste</button>
+        </div>
+        <div class="config-actions">
+            <button onclick="exportConfig()" class="btn-secondary" title="Sauvegarder mes favoris">
+                📤 Exporter mes Favoris
+            </button>
+
+            <label for="import-input" class="btn-secondary" style="cursor: pointer;" title="Charger un fichier de favoris">
+                📥 Importer
+            </label>
+            <input type="file" id="import-input" accept=".json" onchange="importConfig(event)" style="display: none;">
+        </div>
+        <div id="vtuber-spotlight" style="display: none; margin-bottom: 30px;"></div>
+    </header>
+    
+    <main id="vtuber-grid" class="grid-container">
+        </main>
+
+    <div id="theater-view" class="hidden">
+    <div class="theater-header">
+        <button onclick="closePlayer()" class="close-btn">❌ Fermer</button>
+        <span id="theater-title">Nom du Streamer</span>
+    </div>
+    <div class="iframe-container">
+        <div id="video-side">
+            <div id="video-wrapper"></div>
+            <div id="streamer-info-panel">
+                <div id="streamer-header-main">
+                    <img id="streamer-pfp" src="" alt="Avatar">
+                    <div id="streamer-text">
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <a id="streamer-link" href="#" target="_blank" style="text-decoration: none;">
+                            <h2 id="streamer-name" style="margin:0; color:#bf94ff;">Nom</h2>
+                        </a>
+                        <span id="theater-viewer-count" class="viewer-badge">🔴 0</span>
+                        
+                        <button id="cinema-mode-btn" onclick="toggleCinemaMode()" class="cinema-btn">
+                            🎬 Mode Cinéma
+                        </button>
+
+                        <button id="share-btn" onclick="copyLiveLink()" class="share-btn">
+                            🔗 Partager le live
+                        </button>
+                    </div>
+                        <p id="streamer-followers">0 followers</p>
+                    </div>
+                </div>
+                <p id="streamer-bio">Chargement de la biographie...</p>
+            </div>
+        </div>
+            <div id="chat-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // Initialisation simple
+        AOS.init({
+            duration: 600,
+            once: true,
+            offset: 50 // Se déclenche rapidement pour éviter les trous blancs
+        });
+    </script>
+    <script src="../script/script.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</body>
+</html>

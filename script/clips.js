@@ -176,3 +176,26 @@ function closeClip() {
     if(modal) modal.style.display = 'none';
     document.body.style.overflow = 'auto';
 }
+
+const savedTheme = localStorage.getItem('vcore-theme') || 'default';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialisation des icônes
+    if (window.lucide) lucide.createIcons();
+
+    // Logique du bouton de thème
+    const themes = ['default', 'dark-purist', 'white-light'];
+    const themeBtn = document.getElementById('theme-cycle-btn');
+
+    themeBtn.addEventListener('click', () => {
+        let current = document.documentElement.getAttribute('data-theme') || 'default';
+        let nextIndex = (themes.indexOf(current) + 1) % themes.length;
+        let nextTheme = themes[nextIndex];
+
+        document.documentElement.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('vcore-theme', nextTheme);
+        
+        console.log("Thème activé :", nextTheme);
+    });
+});

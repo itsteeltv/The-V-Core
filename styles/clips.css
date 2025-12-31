@@ -246,3 +246,74 @@
 .planning-btn:hover, .clip-btn:hover, .home-btn:hover, .scan-btn:hover{
     background: var(--clr-purple-vibrant);
 }
+
+/* --- NAVBAR STICKY --- */
+.main-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(14, 14, 16, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--clr-purple-vibrant);
+    padding: 12px 0;
+    margin-bottom: 30px;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-logo {
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-logo .highlight { color: var(--clr-purple-vibrant); }
+
+.nav-menu { display: flex; gap: 20px; }
+
+.nav-link {
+    color: var(--text-main);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: rgba(130, 69, 191, 0.2);
+    color: var(--clr-purple-bright);
+}
+
+/* Style du bouton Thème */
+.theme-btn {
+    background: none;
+    border: 1px solid var(--clr-purple-vibrant);
+    color: white;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.theme-btn:hover { background: var(--clr-purple-vibrant); transform: rotate(15deg); }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .nav-link span { display: none; }
+    .nav-logo .logo-text { display: none; }
+}

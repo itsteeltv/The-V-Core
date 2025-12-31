@@ -7,57 +7,54 @@
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <title>The V-Core</title>
-    <script>
-        const savedTheme = localStorage.getItem('vcore-theme') || 'default';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9146ff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('PWA Service Worker enregistré !'))
-            .catch(err => console.log('Erreur PWA:', err));
-        });
-    }
-    </script>
 </head>
 <body>
     <div class="container">
         <div id="homePage" class="page active">
+            <div class="main-navbar">
+                <div class="nav-container">
+                    <a href="index.html" class="nav-logo">
+                        <span class="logo-icon">📺</span>
+                        <span class="logo-text">The <span class="highlight">V-Core</span></span>
+                    </a>       
+                    <nav class="nav-menu">
+                        <a href="../index.html" class="nav-link active">
+                            <i data-lucide="home"></i> <span>Accueil</span>
+                        </a>
+                        <a href="pages/discvvtfr.html" class="nav-link">
+                            <i data-lucide="search"></i> <span>Finder</span>
+                        </a>
+                        <a href="pages/planning.html" class="nav-link">
+                            <i data-lucide="calendar"></i> <span>Planning</span>
+                        </a>
+                        <a href="pages/clip.html" class="nav-link">
+                            <i data-lucide="clapperboard"></i> <span>Clips</span>
+                        </a>
+
+                        <div class="nav-actions">
+                            <button id="theme-cycle-btn" class="theme-btn" title="Changer l'ambiance">
+                                <i data-lucide="palette"></i>
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            
             <header>
                 <h1>The V-Core</h1>
                 <p class="subtitle">La plateforme d'outils pour la communauté VTuber française</p>
-                
-                <div class="theme-switcher">
-                    <label for="theme-select" style="font-size: 0.9rem; color: var(--clr-peach);">🎨 Style :</label>
-                    <select id="theme-select" onchange="changeTheme(this.value)">
-                        <option value="default">V-Core (Original)</option>
-                        <option value="dark-purist">Dark Puriste</option>
-                        <option value="white-light">White Puriste</option>
-                    </select>
-                </div>
             </header>
 
-            <script>
-            function executeGlobalSearch() {
-                const query = document.getElementById('global-search').value.trim();
-                if (query) {
-                    // Redirige vers le Finder avec le paramètre de recherche
-                    window.location.href = `discvvtfr.html?search=${encodeURIComponent(query)}`;
-                }
-            }
-            </script>
             <div class="tools-grid">
                 <div class="tool-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="tool-icon">🔍</div>
                     <h2>VTubersFR Finder</h2>
                     <p>Découvrez tous les VTubers français qui stream sur Twitch</p>
-                    <a href="discvvtfr.html" class="tool-button">
+                    <a href="pages/discvvtfr.html" class="tool-button">
                         Accéder à l'outil →
                     </a>
                 </div>
@@ -66,7 +63,7 @@
                     <div class="tool-icon">📅</div>
                     <h2>Planning Manager</h2>
                     <p>Gérez vos rendez-vous streaming et collaborez avec d'autres VTubers</p>
-                    <a href="planning.html" class="tool-button">
+                    <a href="pages/planning.html" class="tool-button">
                         Accéder à l'outil →
                     </a>
                 </div>
@@ -74,11 +71,27 @@
                     <div class="tool-icon">📼</div>
                     <h2>Clip</h2>
                     <p>Regardez les meilleurs clips de la communauté vtubing française.</p>
-                    <a href="clip.html" class="tool-button">
+                    <a href="pages/clip.html" class="tool-button">
                         Accéder à l'outil →
                     </a>
                 </div>
             </div>
+        </br>
+            <div class="divider-gradient"></div>
+            <section class="v-roulette-section container" style="text-align: center;">
+                
+                <h2 style="color: var(--clr-purple-soft);">🎰 V-Roulette FR</h2>
+                <p class="subtitle">Tu ne sais pas qui regarder ? Laisse le destin choisir un VTuber FR en live !</p>
+
+                <div id="roulette-display" class="roulette-display">
+                    <div class="placeholder-wheel">?</div>
+                </div>
+
+                <button id="spin-button" onclick="spinTheWheel()">🎰 Lancer la roue</button>
+                <audio id="spin-audio" src="item-roulette.mp3"></audio>
+            </section>
+        </br>
+    
             <section class="credits-section" data-aos="fade-up">
                 <div class="divider-gradient"></div>
                 
@@ -108,8 +121,16 @@
                             <p>Idée : Planning avec la possibilité de montré les stream collab + link avec Twitch</p>
                         </div>
                     </div>    
+                
+                    <div class="contributor-card">
+                        <img src="https://pbs.twimg.com/profile_images/1972726006021570560/F8pNRKoh_400x400.jpg" alt="Ryoko-san">
+                        <div class="contributor-details">
+                            <strong>Ryoko-san</strong>
+                            <p>Idée : Rajoutez du gambling pour afficher un vtuberfr aléatoirement</p>
+                        </div>
+                    </div>
                 </div>
-            </br>
+                </br>
                 <h4 class="contributors-title">Remerciements aux Cobayes direct ou indirect</h4>
                 <div class="contributors-grid">
                     <div class="contributor-card">
@@ -135,19 +156,9 @@
         </div>
     </div>
 
-    <script>
-        function changeTheme(themeName) {
-            document.documentElement.setAttribute('data-theme', themeName);
-            localStorage.setItem('vcore-theme', themeName);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('vcore-theme') || 'default';
-            document.getElementById('theme-select').value = saved;
-        });
-    </script>
-
+    <script src="index.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         AOS.init({
             duration: 800, // Durée des animations

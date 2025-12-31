@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The V-Core - Le Mur des Clips VTuberFR</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../styles/stylediscvtfr.css">
+    <link rel="stylesheet" href="../styles/clips.css">
+</head>
+<body>
+    <div class="main-navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <span class="logo-icon">📼</span>
+                <span class="logo-text">Clip <span class="highlight">Wall</span></span>
+            </a>       
+            <nav class="nav-menu">
+                <a href="../index.html" class="nav-link">
+                    <i data-lucide="home"></i> <span>Accueil</span>
+                </a>
+                <a href="../pages/discvvtfr.html" class="nav-link">
+                    <i data-lucide="search"></i> <span>Finder</span>
+                </a>
+                <a href="../pages/planning.html" class="nav-link">
+                    <i data-lucide="calendar"></i> <span>Planning</span>
+                </a>
+                <a href="../pages/clip.html" class="nav-link active">
+                    <i data-lucide="clapperboard"></i> <span>Clips</span>
+                </a>
+
+                <div class="nav-actions">
+                    <button id="theme-cycle-btn" class="theme-btn" title="Changer l'ambiance">
+                        <i data-lucide="palette"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="clips-header">
+            <h1>💜 Le Mur des Clips VTuberFR</h1>
+            <p>Les moments les plus mémorables de la communauté francophone</p>
+            <div class="filter-buttons">
+                <button class="clip-btn" onclick="loadCommunityClips('week')">Cette semaine</button>
+                <button class="clip-btn" onclick="loadCommunityClips('month')">Ce mois-ci</button>
+                <button class="clip-btn" onclick="loadCommunityClips('24h')">Dernières 24h</button>
+            </div>
+        </header>
+
+        <div id="clips-container" class="clips-grid">
+            </div>
+    </div>
+
+    <div id="clip-modal" class="modal" onclick="closeClip()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeClip()">&times;</span>
+            
+            <div id="video-wrapper"></div>
+        </div>
+    </div>
+
+    <script src="../script/script.js"></script> 
+    <script src="../script/clips.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</body>
+</html>

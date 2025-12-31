@@ -4,19 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The V-Core - Planning Hebdomadaire</title>
-    <link rel="stylesheet" href="stylediscvtfr.css">
-    <link rel="stylesheet" href="planning.css">
+    <link rel="stylesheet" href="../styles/stylediscvtfr.css">
+    <link rel="stylesheet" href="../styles/planning.css">
     <script>
     const savedTheme = localStorage.getItem('vcore-theme') || 'default';
     document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 </head>
 <body>
+    <div class="main-navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <span class="logo-icon">🔍</span>
+                <span class="logo-text">Vtuber <span class="highlight">Finder</span></span>
+            </a>       
+            <nav class="nav-menu">
+                <a href="../index.html" class="nav-link">
+                    <i data-lucide="home"></i> <span>Accueil</span>
+                </a>
+                <a href="../pages/discvvtfr.html" class="nav-link">
+                    <i data-lucide="search"></i> <span>Finder</span>
+                </a>
+                <a href="../pages/planning.html" class="nav-link active">
+                    <i data-lucide="calendar"></i> <span>Planning</span>
+                </a>
+                <a href="../pages/clip.html" class="nav-link">
+                    <i data-lucide="clapperboard"></i> <span>Clips</span>
+                </a>
 
-    <a href="index.html" class="home-btn">🏠 Accueil Plateforme</a>
-    <a href="discvvtfr.html" class="scan-btn">🔍 VTuberFR Finder</a>
-    <a href="planning.html" class="planning-btn">📅 Planning Creator</a>
-    <a href="clip.html" class="clip-btn">📼 Meilleur Clip</a>
+                <div class="nav-actions">
+                    <button id="theme-cycle-btn" class="theme-btn" title="Changer l'ambiance">
+                        <i data-lucide="palette"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </div>
 
     <div class="schedule-container">
         <header class="schedule-header">
@@ -89,6 +112,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="schedule.js"></script>
+    <script src="../script/schedule.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </body>
 </html>
