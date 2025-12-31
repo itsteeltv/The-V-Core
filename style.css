@@ -28,6 +28,20 @@
     --text-main: #ffffff;
 }
 
+/* Thème Cyberpunk (Néon & Contraste) */
+[data-theme="cyberpunk"] {
+    --clr-rose-light: #00fbff; 
+    --clr-purple-soft: #ff00ff; 
+    --clr-purple-vibrant: #bc00ff;
+    --clr-purple-bright: #00ff41; 
+    --clr-peach: #fff200; 
+    --bg-main: #020005;
+    --bg-gradient: linear-gradient(135deg, #020005 0%, #0d0221 100%);
+    --card-bg: rgba(13, 2, 33, 0.8);
+    --card-border: #bc00ff;
+    --text-main: #ffffff;
+}
+
 /* Thème White Puriste (Clair & Propre) */
 [data-theme="white-light"] {
     --clr-rose-light: #5a2e85;
@@ -39,9 +53,22 @@
     --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     --card-bg: rgba(255, 255, 255, 0.8);
     --card-border: rgba(130, 69, 191, 0.2);
-    --text-main: #ffff;
+    --text-main: #1a1a1c;
 }
 
+/* Thème Pastel Dream (Kawaii & Doux) */
+[data-theme="pastel-dream"] {
+    --clr-rose-light: #ffb7d5;
+    --clr-purple-soft: #c3a6ff;
+    --clr-purple-vibrant: #92e1ff;
+    --clr-purple-bright: #9ceecd;
+    --clr-peach: #ffebb5;
+    --bg-main: #fff0f5;
+    --bg-gradient: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+    --card-bg: rgba(255, 255, 255, 0.5);
+    --card-border: #ffffff;
+    --text-main: #4a2b6d;
+}
 
 /* --- CONFIGURATION GLOBALE --- */
 * {
@@ -144,7 +171,6 @@ h1 {
     border-radius: 20px;
     display: flex;
     align-items: center;
-    text-align: center;
     justify-content: center;
     font-size: 2.5rem;
     margin-bottom: 20px;
@@ -166,10 +192,9 @@ h1 {
 }
 
 /* --- BOUTONS --- */
-.tool-button {
-    display: flex;
+.tool-button, button {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
     padding: 12px 24px;
     background: linear-gradient(135deg, var(--clr-purple-vibrant) 0%, var(--clr-purple-bright) 100%);
@@ -179,7 +204,6 @@ h1 {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-decoration: none;
 }
 
 /* --- FORMULAIRES --- */
@@ -509,172 +533,3 @@ footer {
     box-shadow: 0 0 20px var(--clr-purple-vibrant);
 }
 
-/* --- NAVBAR STICKY --- */
-.main-navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(14, 14, 16, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--clr-purple-vibrant);
-    padding: 12px 0;
-    margin-bottom: 30px;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-}
-
-.nav-logo {
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-logo .highlight { color: var(--clr-purple-vibrant); }
-
-.nav-menu { display: flex; gap: 20px; }
-
-.nav-link {
-    color: var(--text-main);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
-    padding: 8px 15px;
-    border-radius: 10px;
-    transition: 0.3s;
-}
-
-.nav-link:hover, .nav-link.active {
-    background: rgba(130, 69, 191, 0.2);
-    color: var(--clr-purple-bright);
-}
-
-/* Style du bouton Thème */
-.theme-btn {
-    background: none;
-    border: 1px solid var(--clr-purple-vibrant);
-    color: white;
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.theme-btn:hover { background: var(--clr-purple-vibrant); transform: rotate(15deg); }
-
-/* Mobile */
-@media (max-width: 768px) {
-    .nav-link span { display: none; }
-    .nav-logo .logo-text { display: none; }
-}
-
-/* --- ANIMATION DE TRANSITION DE PAGE --- */
-body {
-    margin: 0;
-    padding: 0;
-    /* On cache le contenu initialement pour le fondu */
-    opacity: 0; 
-    animation: pageFadeIn 0.5s ease-out forwards;
-    background-color: var(--bg-main); /* Empêche le flash blanc */
-}
-
-@keyframes pageFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(5px); /* Petit effet de montée */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Optionnel : Animation spécifique pour les cartes pour un effet "cascade" */
-.tool-card, .stream-card, .contributor-card {
-    animation: cardEntrance 0.6s ease-out both;
-}
-
-@keyframes cardEntrance {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Animation de "gonflement" du bouton Roulette */
-#spin-button:active {
-    transform: scale(0.95);
-    transition: 0.1s;
-}
-
-/* Effet d'étincelles lors du clic sur Spin */
-.sparkle-effect {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: var(--clr-purple-bright);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: sparkle-fly 0.6s ease-out forwards;
-}
-
-@keyframes sparkle-fly {
-    0% { transform: translate(0,0) scale(1); opacity: 1; }
-    100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
-}
-
-/* --- SKELETON SCREEN ANIMATION --- */
-.skeleton-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    height: 350px; /* Aligné sur la hauteur de tes stream-cards */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Le conteneur qui pulse */
-.skeleton-shimmer {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite linear;
-}
-
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-/* Éléments internes du squelette */
-.skeleton-img { width: 100%; height: 180px; background: rgba(255,255,255,0.05); }
-.skeleton-text { height: 15px; background: rgba(255,255,255,0.05); margin: 15px; border-radius: 4px; }
-.skeleton-text.short { width: 50%; }
-
-/* Animation de pulsation globale en plus du shimmer */
-.skeleton-card {
-    animation: pulse-skeleton 1.8s infinite ease-in-out;
-}
-
-@keyframes pulse-skeleton {
-    0% { opacity: 0.6; }
-    50% { opacity: 1; }
-    100% { opacity: 0.6; }
-}

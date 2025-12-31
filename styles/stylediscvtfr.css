@@ -138,50 +138,57 @@ h1 {
     box-shadow: 0 0 20px rgba(130, 69, 191, 0.6); 
 }
 
-/* --- SKELETON SCREEN ANIMATION --- */
+/* --- SKELETON LOADING & PROGRESS --- */
+/* Style du Skeleton */
 .skeleton-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+    background: #1a1a1a;
     border-radius: 12px;
     overflow: hidden;
-    height: 350px; /* Aligné sur la hauteur de tes stream-cards */
-    display: flex;
-    flex-direction: column;
+    height: 300px; /* Aligné sur la taille de tes cartes */
 }
 
-/* Le conteneur qui pulse */
-.skeleton-shimmer {
+.skeleton-thumb {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 16 / 9;
+    background: #2a2a2a;
+}
+
+.skeleton-text {
+    height: 15px;
+    margin: 15px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    width: 80%;
+}
+
+.skeleton-text.short { width: 40%; }
+
+/* Animation de balayage (Shimmer) */
+.skeleton-pulse {
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-pulse::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
     background: linear-gradient(
         90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0) 100%
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.05) 20%,
+        rgba(255, 255, 255, 0.1) 60%,
+        rgba(255, 255, 255, 0)
     );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite linear;
+    animation: shimmer 1.5s infinite;
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-/* Éléments internes du squelette */
-.skeleton-img { width: 100%; height: 180px; background: rgba(255,255,255,0.05); }
-.skeleton-text { height: 15px; background: rgba(255,255,255,0.05); margin: 15px; border-radius: 4px; }
-.skeleton-text.short { width: 50%; }
-
-/* Animation de pulsation globale en plus du shimmer */
-.skeleton-card {
-    animation: pulse-skeleton 1.8s infinite ease-in-out;
-}
-
-@keyframes pulse-skeleton {
-    0% { opacity: 0.6; }
-    50% { opacity: 1; }
-    100% { opacity: 0.6; }
+    100% { transform: translateX(100%); }
 }
 /* --- TAGS & BADGES --- */
 .tags-container {
@@ -972,122 +979,4 @@ iframe { width: 100%; height: 100%; border: none; }
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
-}
-
-/* Le bouton favori (ajoute cette classe dans ton JS lors de la création du bouton) */
-.fav-btn {
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.fav-btn:hover {
-    transform: scale(1.2);
-}
-
-/* Animation "Pop" quand on ajoute en favori */
-.fav-btn.active-pop {
-    animation: heartBeat 0.4s ease-in-out;
-    color: #ff4b4b !important;
-}
-
-@keyframes heartBeat {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.4); }
-    100% { transform: scale(1); }
-}
-
-.tool-card {
-    position: relative;
-    z-index: 1;
-    transition: all 0.3s ease;
-}
-
-.tool-card::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(45deg, var(--clr-purple-vibrant), transparent, var(--clr-purple-bright));
-    z-index: -1;
-    border-radius: 22px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.tool-card:hover::before {
-    opacity: 1;
-}
-
-.tool-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-/* --- NAVBAR STICKY --- */
-.main-navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(14, 14, 16, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--clr-purple-vibrant);
-    padding: 12px 0;
-    margin-bottom: 30px;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-}
-
-.nav-logo {
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-logo .highlight { color: var(--clr-purple-vibrant); }
-
-.nav-menu { display: flex; gap: 20px; }
-
-.nav-link {
-    color: var(--text-main);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
-    padding: 8px 15px;
-    border-radius: 10px;
-    transition: 0.3s;
-}
-
-.nav-link:hover, .nav-link.active {
-    background: rgba(130, 69, 191, 0.2);
-    color: var(--clr-purple-bright);
-}
-
-/* Style du bouton Thème */
-.theme-btn {
-    background: none;
-    border: 1px solid var(--clr-purple-vibrant);
-    color: white;
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.theme-btn:hover { background: var(--clr-purple-vibrant); transform: rotate(15deg); }
-
-/* Mobile */
-@media (max-width: 768px) {
-    .nav-link span { display: none; }
-    .nav-logo .logo-text { display: none; }
 }
